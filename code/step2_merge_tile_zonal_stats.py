@@ -61,6 +61,7 @@ from glob import glob
 import os
 from calendar import monthrange
 from datetime import datetime
+from shapely.geometry import Point
 
 
 def start_seasonal_date(date_):
@@ -649,7 +650,19 @@ def main_routine(biomass_csv, tile_dir, output_dir):
     # Read in biomass csv
     biomass_df = pd.read_csv(biomass_csv)
 
+    #todo add geometry here
+
+    # Add a geometry field
+    #biomass_df['geometry'] = biomass_df.apply(lambda row: Point(row.lon_gda94, row.lat_gda94), axis=1)
+
+    # Convert the pandas DataFrame to a GeoDataFrame
+    #gdf = gpd.GeoDataFrame(biomass_df, geometry='geometry')
+
+
     print("biomass_df: ", list(biomass_df.columns))
+    print("2 - 653")
+    # import sys
+    # sys.exit()
 
 
     # Call the convert to datetime function
@@ -673,6 +686,18 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         tile_dir)
 
 
+
+    #todo remove this area
+    # #dbg_list = []
+    # dbi_list = []
+    # dp0_list = []
+    # dp1_list = []
+    # dbg_mask_list = []
+    # dbi_mask_list = []
+    # dp0_mask_list = []
+    # dp1_mask_list = []
+
+
     # --------------------------------------- no fire mask ------------------------------------------
 
     if len(dbg_list) > 0:
@@ -684,10 +709,14 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df_drop = pd.concat(merge_dbg_dropna_list)
         # todo remove test outputs
 
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbg.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbg_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbg.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbg_dropna.csv")
 
         print("df_drop: ", list(df_drop.columns))
+
+        print("2 - 707")
+        # import sys
+        # sys.exit()
 
 
         df_drop_dbg_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
@@ -738,9 +767,9 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df = pd.concat(merge_dbi_list)
         df_drop = pd.concat(merge_dbi_dropna_list)
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbi.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbi.csv")
 
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbi_dropna.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbi_dropna.csv")
         print("df_drop: ", list(df_drop.columns))
 
 
@@ -793,8 +822,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df = pd.concat(merge_dp0_list)
         df_drop = pd.concat(merge_dp0_dropna_list)
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp0.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp0_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp0.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp0_dropna.csv")
 
         df_drop_dp0_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                         'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha', 'bio_w_kg1ha',
@@ -834,8 +863,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df_drop = pd.concat(merge_dp1_dropna_list)
 
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp1.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp1_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp1.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp1_dropna.csv")
 
         df_drop_dp1_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                         'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha', 'bio_w_kg1ha',
@@ -877,8 +906,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df_drop = pd.concat(merge_dbg_mask_dropna_list)
 
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbg_mask.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbg_mask_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbg_mask.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbg_mask_dropna.csv")
 
         df_drop_dbg_mask_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                              'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha', 'bio_w_kg1ha',
@@ -936,8 +965,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df_drop = pd.concat(merge_dbi_mask_dropna_list)
 
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbi_mask.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dbi_mask_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbi_mask.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dbi_mask_dropna.csv")
 
         df_drop_dbi_mask_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                              'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha', 'bio_w_kg1ha',
@@ -995,8 +1024,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df_drop = pd.concat(merge_dp0_mask_dropna_list)
 
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp0_mask.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp0_mask_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp0_mask.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp0_mask_dropna.csv")
 
         df_drop_dp0_mask_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                              'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha', 'bio_w_kg1ha',
@@ -1041,8 +1070,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         df_drop = pd.concat(merge_dp1_mask_dropna_list)
 
         # todo remove test outputs
-        df.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp1_mask.csv")
-        df_drop.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_dp1_mask_dropna.csv")
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp1_mask.csv")
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_dp1_mask_dropna.csv")
 
         df_drop_dp1_mask_reformat = df_drop[['uid_x', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                              'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha', 'bio_w_kg1ha',
@@ -1080,6 +1109,12 @@ def main_routine(biomass_csv, tile_dir, output_dir):
 
     # =========================================== Single ===============================================================
 
+    df_drop_dbg_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\test.csv")
+    print("2 - 1111")
+    # import sys
+    # sys.exit()
+
+
     dbg_single = df_drop_dbg_reformat[df_drop_dbg_reformat["dbg_seas"] == "single"]
     dbg_mask_single = df_drop_dbg_mask_reformat[df_drop_dbg_mask_reformat["dbgfm_seas"] == "single"]
 
@@ -1094,10 +1129,11 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                                     'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dbg_both.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dbg_both.csv", index=False)
+    #dbg_both.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbg_both.csv", index=False)
 
     dp0_single = df_drop_dp0_reformat[df_drop_dp0_reformat["dp0_seas"] == "single"]
     dp0_mask_single = df_drop_dp0_mask_reformat[df_drop_dp0_mask_reformat["dp0fm_seas"] == "single"]
+
 
     # ----------------------------------------- dp0 single with without mask-------------------------------------------
 
@@ -1110,7 +1146,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                                     'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dp0_both.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dp0_both.csv", index=False)
+    dp0_both.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dp0_both.csv", index=False)
 
     # ============================================= Seasonal ===========================================================
 
@@ -1161,8 +1197,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         dbi_dt='dbi_dry_dt', dbi_dir='dbi_dry_dir',
         dbi_seas='dbi_dry_seas'), inplace=True)
 
-    dbi_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry\dbi_dry.csv", index=False)
-    dbi_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual\dbi_annual.csv", index=False)
+    dbi_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dbi_dry.csv", index=False)
+    dbi_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual\dbi_annual.csv", index=False)
 
     # ----------------------------------------- dbi both season NO mask -------------------------------------------
 
@@ -1175,7 +1211,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                                    'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dbi_both_season.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dbi_both_season.csv", index=False)
+    dbi_both_season.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbi_both_season.csv", index=False)
 
     # ==================================================================================================================
 
@@ -1226,8 +1262,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         dbifm_dt='dbifm_dry_dt', dbifm_dir='dbifm_dry_dir',
         dbifm_seas='dbifm_dry_seas'), inplace=True)
 
-    dbi_mask_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry_mask\dbi_mask_dry.csv", index=False)
-    dbi_mask_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual_mask\dbi_mask_annual.csv", index=False)
+    dbi_mask_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dbi_mask_dry.csv", index=False)
+    dbi_mask_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dbi_mask_annual.csv", index=False)
 
     # ----------------------------------------- dbi both season with mask -------------------------------------------
 
@@ -1241,7 +1277,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dbi_mask_both_season.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dbi_mask_both_season.csv", index=False)
+    dbi_mask_both_season.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbi_mask_both_season.csv", index=False)
 
     # ==================================================================================================================
 
@@ -1271,8 +1307,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         dp1_dt='dp1_dry_dt', dp1_dir='dp1_dry_dir',
         dp1_seas='dp1_dry_seas'), inplace=True)
 
-    dp1_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry\dp1_dry.csv", index=False)
-    dp1_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual\dp1_annual.csv", index=False)
+    dp1_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dp1_dry.csv", index=False)
+    dp1_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual\dp1_annual.csv", index=False)
 
     # ----------------------------------------- dp1 both season NO mask -------------------------------------------
 
@@ -1286,7 +1322,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                    'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dp1_both_season.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dp1_both_season.csv", index=False)
+    dp1_both_season.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dp1_both_season.csv", index=False)
 
     # ==================================================================================================================
 
@@ -1316,8 +1352,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
         dp1fm_dt='dp1fm_dry_dt', dp1fm_dir='dp1fm_dry_dir',
         dp1fm_seas='dp1fm_dry_seas'), inplace=True)
 
-    dp1_mask_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry_mask\dp1_mask_dry.csv", index=False)
-    dp1_mask_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual_mask\dp1_mask_annual.csv", index=False)
+    dp1_mask_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dp1_mask_dry.csv", index=False)
+    dp1_mask_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dp1_mask_annual.csv", index=False)
 
     # ----------------------------------------- dp1 both season with mask -------------------------------------------
 
@@ -1331,7 +1367,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dp1_mask_both_season.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dp1_mask_both_season.csv", index=False)
+    dp1_mask_both_season.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dp1_mask_both_season.csv", index=False)
 
     # ================================================= MERGE ==========================================================
 
@@ -1347,7 +1383,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                                          'c_s_kg1ha',
                                                                          'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbi_dp1_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry\dbi_dp1_dry.csv", index=False)
+    dbi_dp1_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dbi_dp1_dry.csv", index=False)
 
     # -------------------------------------------- DRY Season Fire mask ----------------------------------
 
@@ -1362,7 +1398,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                     'c_s_kg1ha',
                                     'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbi_dp1_mask_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry_mask\dbi_dp1_mask_dry.csv", index=False)
+    dbi_dp1_mask_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dbi_dp1_mask_dry.csv", index=False)
 
     # ==================================================================================================================
 
@@ -1379,7 +1415,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                   'c_s_kg1ha',
                                   'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbi_dp1_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual\dbi_dp1_annual.csv", index=False)
+    dbi_dp1_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual\dbi_dp1_annual.csv", index=False)
 
     # -------------------------------------------- DRY Season Fire mask ----------------------------------
 
@@ -1397,7 +1433,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                        'c_s_kg1ha',
                                        'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbi_dp1_mask_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual_mask\dbi_dp1_mask_annual.csv", index=False)
+    dbi_dp1_mask_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dbi_dp1_mask_annual.csv", index=False)
 
     # ==================================================================================================================
     # ------------------------------------------------- Single date ----------------------------------------------------
@@ -1415,7 +1451,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                   'c_s_kg1ha',
                                   'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbg_dp0_single.to_csv(r"U:\biomass\collated_zonal_stats\single\dbg_dp0_single.csv", index=False)
+    dbg_dp0_single.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\single\dbg_dp0_single.csv", index=False)
 
     # -------------------------------------------- Single mask ----------------------------------
 
@@ -1433,7 +1469,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                     'c_s_kg1ha',
                                                     'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbg_dp0_mask_single.to_csv(r"U:\biomass\collated_zonal_stats\single_mask\dbg_dp0_mask_single.csv", index=False)
+    dbg_dp0_mask_single.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\single_mask\dbg_dp0_mask_single.csv", index=False)
 
     # ==================================================================================================================
     # --------------------------------------- Merge SR ----------------------------------------
@@ -1450,7 +1486,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                                               'c_s_kg1ha',
                                                                               'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    dbg_dbi.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dbg_dbi.csv", index=False)
+    dbg_dbi.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbg_dbi.csv", index=False)
 
     dbg_dbi_dbi_mask = pd.merge(right=dbg_dbi, left=dbi_mask_both_season, how="outer",
                                 on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
@@ -1462,7 +1498,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                     'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dbg_dbi_dbi_mask.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dbg_dbi_dbi_mask.csv", index=False)
+    dbg_dbi_dbi_mask.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbg_dbi_dbi_mask.csv", index=False)
 
     # --------------------------------------- Merge FC ----------------------------------------
 
@@ -1476,7 +1512,7 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                            'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dp0_dp1.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dp0_dp1.csv", index=False)
+    dp0_dp1.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dp0_dp1.csv", index=False)
 
     dp0_dp1_dp1_mask = pd.merge(right=dp0_dp1, left=dp1_mask_both_season, how="outer",
                                 on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
@@ -1488,10 +1524,15 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                     'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dp0_dp1_dp1_mask.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dp0_dp1_dp1_mask.csv", index=False)
+    dp0_dp1_dp1_mask.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dp0_dp1_dp1_mask.csv", index=False)
 
     # --------------------------------------- Merge SR and FC ----------------------------------------
 
+    print(dbg_dbi_dbi_mask.columns.tolist())
+    print(dp0_dp1_dp1_mask.columns.tolist())
+    print("2 - 1531")
+    # import sys
+    # sys.exit()
     dbg_dbi_dbi_mask_dp0_dp1_dp1_mask = pd.merge(right=dbg_dbi_dbi_mask, left=dp0_dp1_dp1_mask, how="outer",
                                                  on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                                                      'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -1502,13 +1543,17 @@ def main_routine(biomass_csv, tile_dir, output_dir):
                                                      'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     # todo remove test outputs
-    dbg_dbi_dbi_mask_dp0_dp1_dp1_mask.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\dbg_dbi_dbi_mask_dp0_dp1_dp1_mask.csv",
+    dbg_dbi_dbi_mask_dp0_dp1_dp1_mask.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbg_dbi_dbi_mask_dp0_dp1_dp1_mask.csv",
                                              index=False)
 
-    # print("final_list: ", list(dbg_dbi_dbi_mask_dp0_dp1_dp1_mask))
+    print("final_list: ", list(dbg_dbi_dbi_mask_dp0_dp1_dp1_mask.columns))
+    # print("2 - 1543")
+    # import sys
+    # sys.exit()
 
     dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_clean = dbg_dbi_dbi_mask_dp0_dp1_dp1_mask[[
-        'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
+        'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+        'bio_l_kg1ha', 'bio_t_kg1ha',
         'bio_b_kg1ha', 'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha',
         'c_t_kg1ha', 'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt',
         # --------------------------------------- dp1 mask annual ----------------------------------
@@ -1670,8 +1715,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
 
     # todo remove test outputs
     dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_clean.to_csv(
-        r"U:\biomass\collated_zonal_stats\sr_fc\dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_clean.csv", index=False)
-    biomass_df.to_csv(r"U:\biomass\collated_zonal_stats\biomass_df.csv", index=False)
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_clean.csv", index=False)
+    biomass_df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\biomass_df.csv", index=False)
 
     return biomass_df, dbg_dbi_dbi_mask_dp0_dp1_dp1_mask, \
         dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_clean, \

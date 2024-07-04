@@ -592,14 +592,14 @@ def main_routine(biomass_csv, dir_, output_dir,
     the biomass data csv.
     This script should be run following the completion of: step1_initiate_biomass_zonal_stats_collation_pipeline.py
 
-    Outputs are temporarily being produced here: U:\biomass\zonal\met.
+    Outputs are temporarily being produced here: C:\Users\robot\projects\biomasss\zonal\met.
     """
 
-    # biomass = r"U:\biomass\collated_agb\20230927\slats_tern_biomass.csv"
+    # biomass = r"C:\Users\robot\projects\biomasss\collated_agb\20230927\slats_tern_biomass.csv"
     biomass_df = pd.read_csv(biomass_csv)
 
-    # dir_ = r"U:\biomass\raw_zonal_stats\met\collation"
-    # output_dir = r"U:\biomass\zonal\new_met"
+    # dir_ = r"C:\Users\robot\projects\biomasss\raw_zonal_stats\met\collation"
+    # output_dir = r"C:\Users\robot\projects\biomasss\zonal\new_met"
 
     biomass_df = convert_to_datetime(biomass_df, "date", "basal_dt")
     biomass_df.sort_values(by='basal_dt', inplace=True)
@@ -817,7 +817,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                              'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
                              'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    si_list01.to_csv(r"U:\biomass\collated_zonal_stats\met\si_list01.csv",
+    si_list01.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\si_list01.csv",
                      index=False)
 
     #
@@ -830,7 +830,7 @@ def main_routine(biomass_csv, dir_, output_dir,
     #                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
     #                                                  'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
     #
-    # si_list012.to_csv(r"U:\biomass\collated_zonal_stats\met\si_list012.csv",
+    # si_list012.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\si_list012.csv",
     #                                          index=False)
     #
     # si_list0123 = pd.merge(right=si_list012, left=si_asof_list[3], how="outer",
@@ -842,7 +842,7 @@ def main_routine(biomass_csv, dir_, output_dir,
     #                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
     #                                                  'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
     #
-    # si_list0123.to_csv(r"U:\biomass\collated_zonal_stats\met\si_list0123.csv",
+    # si_list0123.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\si_list0123.csv",
     #                                          index=False)
     #
     # si_list01234 = pd.merge(right=si_list0123, left=si_asof_list[4], how="outer",
@@ -854,7 +854,7 @@ def main_routine(biomass_csv, dir_, output_dir,
     #                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
     #                                                  'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
     #
-    # si_list01234.to_csv(r"U:\biomass\collated_zonal_stats\met\si_list01234.csv",
+    # si_list01234.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\si_list01234.csv",
     #                                          index=False)
 
     # ------------------------------------ Merge Seasonal -----------------------------------------
@@ -870,7 +870,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                         'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
                                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    seasonal_asof_list01.to_csv(r"U:\biomass\collated_zonal_stats\met\seasonal_asof_list01.csv",
+    seasonal_asof_list01.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\seasonal_asof_list01.csv",
                                 index=False)
     print(si_list[0].columns)
 
@@ -883,7 +883,7 @@ def main_routine(biomass_csv, dir_, output_dir,
     #                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
     #                                                  'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
     #
-    # seasonal_asof_list012.to_csv(r"U:\biomass\collated_zonal_stats\met\seasonal_asof_list012.csv",
+    # seasonal_asof_list012.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\seasonal_asof_list012.csv",
     #                                          index=False)
 
     # seasonal_asof_list0123 = pd.merge(right=seasonal_asof_list012, left=seasonal_asof_list[3],
@@ -895,7 +895,7 @@ def main_routine(biomass_csv, dir_, output_dir,
     #                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
     #                                                  'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
     #
-    # seasonal_asof_list0123.to_csv(r"U:\biomass\collated_zonal_stats\met\seasonal_asof_list0123.csv",
+    # seasonal_asof_list0123.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\seasonal_asof_list0123.csv",
     #                                          index=False)
 
     # seasonal_asof_list01234 = pd.merge(right=seasonal_asof_list0123, left=seasonal_asof_list[4], how="outer",
@@ -907,7 +907,7 @@ def main_routine(biomass_csv, dir_, output_dir,
     #                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
     #                                                  'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
     #
-    # seasonal_asof_list01234.to_csv(r"U:\biomass\collated_zonal_stats\met\seasonal_asof_list01234.csv",
+    # seasonal_asof_list01234.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\seasonal_asof_list01234.csv",
     #                                          index=False)
 
     # ==================================================================================================================
@@ -922,7 +922,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     print(list(seasonal_si.columns))
-    seasonal_si.to_csv(r"U:\biomass\collated_zonal_stats\met\seasonal_si.csv",
+    seasonal_si.to_csv(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met\seasonal_si.csv",
                        index=False)
 
     # import sys
@@ -960,7 +960,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                              'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp0_dbg_si_single_annual_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\single\dp0_dbg_si_single_annual_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single\dp0_dbg_si_single_annual_density_near_met_si.csv",
         index=False)
 
     print("dp0_dbg_si_mask_single_annual_density_near_met: ", dp0_dbg_si_mask_single_annual_density_near_met.columns,
@@ -982,7 +982,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                                   'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp0_dbg_si_mask_single_annual_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_annual_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_annual_density_near_met_si.csv",
         index=False)
 
     # ------------------------------------------------------ dry merge -------------------------------------------------
@@ -997,7 +997,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                           'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp0_dbg_si_single_dry_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\single\dp0_dbg_si_single_dry_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single\dp0_dbg_si_single_dry_density_near_met_si.csv",
         index=False)
 
     dp0_dbg_si_mask_single_dry_density_near_met_si = pd.merge(right=dp0_dbg_si_mask_single_dry_density_near_met, left=seasonal_si_clean,
@@ -1012,7 +1012,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                                'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp0_dbg_si_mask_single_dry_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_dry_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_dry_density_near_met_si.csv",
         index=False)
 
     # ------------------------------------------------------ annual merge dp1 bbi --------------------------------------
@@ -1026,7 +1026,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                       'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp1_dbi_si_annual_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\annual\dp1_dbi_si_annual_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\annual\dp1_dbi_si_annual_density_near_met_si.csv",
         index=False)
 
     dp1_dbi_si_annual_mask_density_near_met_si = pd.merge(right=dp1_dbi_si_annual_mask_density_near_met, left=seasonal_si_clean, how="outer",
@@ -1039,7 +1039,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                            'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp1_dbi_si_annual_mask_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_annual_mask_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\annual_mask\dp1_dbi_si_annual_mask_density_near_met_si.csv",
         index=False)
 
     # ---------------------------------------------- dry merge dp1 bbi -------------------------------------------------
@@ -1053,7 +1053,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                    'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp1_dbi_si_dry_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry_density_near_df_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\dry\dp1_dbi_si_dry_density_near_df_near_met_si.csv",
         index=False)
 
     dp1_dbi_si_dry_mask_density_near_met_si = pd.merge(right=dp1_dbi_si_dry_mask_density_near_met, left=seasonal_si_clean, how="outer",
@@ -1066,7 +1066,7 @@ def main_routine(biomass_csv, dir_, output_dir,
                                                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
     dp1_dbi_si_dry_mask_density_near_met_si.to_csv(
-        r"U:\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_dry_mask_density_near_met_si.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\dry_mask\dp1_dbi_si_dry_mask_density_near_met_si.csv",
         index=False)
 
     return seasonal_si_clean, dp0_dbg_si_single_annual_density_near_met_si, \

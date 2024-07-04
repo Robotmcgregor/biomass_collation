@@ -262,7 +262,7 @@ def main_routine(df_all):
         out_df_list.append(out_df)
 
         for df, str_df in zip(out_df_list, list_str_df):
-            output = os.path.join(r"U:\biomass\collated_zonal_stats\veg_ind", f"{str_df}_veg_indices.csv")
+            output = os.path.join(r"C:\Users\robot\projects\biomass\collated_zonal_stats\veg_ind", f"{str_df}_veg_indices.csv")
             df.to_csv(output, index=False)
 
     # --------------------------------------- Merge vegetation indices  ----------------------------------------
@@ -270,38 +270,38 @@ def main_routine(df_all):
     df01 = pd.merge(right=out_df_list[0], left=out_df_list[1], how="outer",
                     on=['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ])
 
-    df01.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df01.csv",
+    df01.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df01.csv",
                 index=False)
 
     df012 = pd.merge(right=df01, left=out_df_list[2], how="outer",
                      on=['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ])
 
-    df012.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df012.csv",
+    df012.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df012.csv",
                  index=False)
 
     df0123 = pd.merge(right=df012, left=out_df_list[3], how="outer",
                       on=['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ])
 
-    df0123.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df0123.csv",
+    df0123.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df0123.csv",
                   index=False)
 
     df01234 = pd.merge(right=df0123, left=out_df_list[4], how="outer",
                        on=['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ])
 
-    df01234.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df01234.csv",
+    df01234.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df01234.csv",
                    index=False)
 
     df012345 = pd.merge(right=df01234, left=out_df_list[5], how="outer",
                         on=['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ])
 
-    df012345.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df01234.csv",
+    df012345.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df01234.csv",
                     index=False)
 
     df_all_filter = df_all[['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ]]
     df_all_012345 = pd.merge(right=df012345, left=df_all, how="outer",
                              on=['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', ])
 
-    df_all_012345.to_csv(r"U:\biomass\collated_zonal_stats\sr_fc\df_all_01234.csv",
+    df_all_012345.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\df_all_01234.csv",
                          index=False)
 
     print(list(df_all_012345.columns))
@@ -439,7 +439,7 @@ def main_routine(df_all):
     #rename_col = {}
 
     # todo remove temp dir
-    df_all_012345_clean.to_csv(r"U:\biomass\collated_zonal_stats\veg_ind\df_all_012345_clean.csv", index=False)
+    df_all_012345_clean.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\veg_ind\df_all_012345_clean.csv", index=False)
 
     # ==================================================================================================================
 
@@ -467,7 +467,7 @@ def main_routine(df_all):
          'dbg_NDGI', 'dbg_RI', 'dbg_NBR', 'dbg_NDII', 'dbg_GDVI', 'dbg_MSAVI', 'dbg_DVI', 'dbg_SAVI',
          'dbg_NDVI', 'dbg_MSR']]
 
-    dp0_dbg_si.to_csv(r"U:\biomass\collated_zonal_stats\single\dp0_dpg_si_single.csv", index=False)
+    dp0_dbg_si.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\single\dp0_dpg_si_single.csv", index=False)
 
     dp0_dbg_si_mask = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -496,7 +496,7 @@ def main_routine(df_all):
          'dbgfm_NDGI', 'dbgfm_RI', 'dbgfm_NBR', 'dbgfm_NDII', 'dbgfm_GDVI', 'dbgfm_MSAVI', 'dbgfm_DVI',
          'dbgfm_SAVI', 'dbgfm_NDVI', 'dbgfm_MSR']]
 
-    dp0_dbg_si_mask.to_csv(r"U:\biomass\collated_zonal_stats\single_mask\dp0_dpg_si_mask_single.csv", index=False)
+    dp0_dbg_si_mask.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dp0_dpg_si_mask_single.csv", index=False)
 
     dp1_dbi_si_dry = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -529,7 +529,7 @@ def main_routine(df_all):
          'dbidry_CVI', 'dbidry_NDGI', 'dbidry_RI', 'dbidry_NBR', 'dbidry_NDII', 'dbidry_GDVI', 'dbidry_MSAVI',
          'dbidry_DVI', 'dbidry_SAVI', 'dbidry_NDVI', 'dbidry_MSR']]
 
-    dp1_dbi_si_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry.csv", index=False)
+    dp1_dbi_si_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry.csv", index=False)
 
     dp1_dbi_si_annual = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -555,7 +555,7 @@ def main_routine(df_all):
          'dbian_GNDVI', 'dbian_CVI', 'dbian_NDGI', 'dbian_RI', 'dbian_NBR', 'dbian_NDII', 'dbian_GDVI',
          'dbian_MSAVI', 'dbian_DVI', 'dbian_SAVI', 'dbian_NDVI', 'dbian_MSR']]
 
-    dp1_dbi_si_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual\dp1_dbi_si_annual.csv", index=False)
+    dp1_dbi_si_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual\dp1_dbi_si_annual.csv", index=False)
 
     dp1_dbi_si_mask_dry = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -594,7 +594,7 @@ def main_routine(df_all):
          'dbifmdry_RI', 'dbifmdry_NBR', 'dbifmdry_NDII', 'dbifmdry_GDVI', 'dbifmdry_MSAVI', 'dbifmdry_DVI',
          'dbifmdry_SAVI', 'dbifmdry_NDVI', 'dbifmdry_MSR']]
 
-    dp1_dbi_si_mask_dry.to_csv(r"U:\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_mask_dry.csv", index=False)
+    dp1_dbi_si_mask_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_mask_dry.csv", index=False)
 
     dp1_dbi_si_mask_annual = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -625,7 +625,7 @@ def main_routine(df_all):
          'dbifman_NDII', 'dbifman_GDVI', 'dbifman_MSAVI', 'dbifman_DVI', 'dbifman_SAVI', 'dbifman_NDVI',
          'dbifman_MSR']]
 
-    dp1_dbi_si_mask_annual.to_csv(r"U:\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_mask_annual.csv", index=False)
+    dp1_dbi_si_mask_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_mask_annual.csv", index=False)
 
     return df_all_012345, df_all_012345_clean, dp0_dbg_si, dp0_dbg_si_mask, dp1_dbi_si_dry, \
         dp1_dbi_si_mask_dry, dp1_dbi_si_annual, dp1_dbi_si_mask_annual

@@ -258,14 +258,14 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
     the biomass data csv.
     This script should be run following the completion of: step1_initiate_biomass_zonal_stats_collation_pipeline.py
 
-    Outputs are temporarily being produced here: U:\biomass\zonal\met.
+    Outputs are temporarily being produced here: C:\Users\robot\projects\biomasss\zonal\met.
     """
 
-    # biomass = r"U:\biomass\collated_agb\20230927\slats_tern_biomass.csv"
+    # biomass = r"C:\Users\robot\projects\biomasss\collated_agb\20230927\slats_tern_biomass.csv"
     biomass_df = pd.read_csv(biomass_csv)
 
-    # dir_ = r"U:\biomass\raw_zonal_stats\met\collation"
-    # output_dir = r"U:\biomass\zonal\new_met"
+    # dir_ = r"C:\Users\robot\projects\biomasss\raw_zonal_stats\met\collation"
+    # output_dir = r"C:\Users\robot\projects\biomasss\zonal\new_met"
 
     biomass_df = convert_to_datetime(biomass_df, "date", "basal_dt")
     biomass_df.sort_values(by='basal_dt', inplace=True)
@@ -360,11 +360,11 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
 
     print(list(n_df1.columns))
 
-    out = os.path.join(r"U:\biomass\collated_zonal_stats\met", "near_met.csv")
+    out = os.path.join(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met", "near_met.csv")
 
     n_df1.to_csv(out, index=False)
 
-    out = os.path.join(r"U:\biomass\collated_zonal_stats\met", "dp0_dbg_si_single_annual_density.csv")
+    out = os.path.join(r"C:\Users\robot\projects\biomasss\collated_zonal_stats\met", "dp0_dbg_si_single_annual_density.csv")
     dp0_dbg_si_single_annual_density.to_csv(out, index=False)
 
     print("-"*100)
@@ -391,7 +391,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                              ])
 
     dp0_dbg_si_single_annual_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\single\dp0_dbg_si_single_annual_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single\dp0_dbg_si_single_annual_density_near_met.csv",
         index=False)
 
 
@@ -409,7 +409,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                                   ])
 
     dp0_dbg_si_mask_single_annual_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_annual_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_annual_density_near_met.csv",
         index=False)
 
     # ------------------------------------------------------ dry merge -------------------------------------------------
@@ -426,7 +426,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                           ])
 
     dp0_dbg_si_single_dry_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\single\dp0_dbg_si_single_dry_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single\dp0_dbg_si_single_dry_density_near_met.csv",
         index=False)
 
     dp0_dbg_si_mask_single_dry_density_near_met = pd.merge(right=dp0_dbg_si_mask_single_dry_density, left=n_df1,
@@ -443,7 +443,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                                ])
 
     dp0_dbg_si_mask_single_dry_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_dry_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_dry_density_near_met.csv",
         index=False)
 
     # ------------------------------------------------------ annual merge dp1 bbi --------------------------------------
@@ -459,7 +459,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                       ])
 
     dp1_dbi_si_annual_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\annual\dp1_dbi_si_annual_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\annual\dp1_dbi_si_annual_density_near_met.csv",
         index=False)
 
     dp1_dbi_si_annual_mask_density_near_met = pd.merge(right=dp1_dbi_si_annual_mask_density, left=n_df1, how="outer",
@@ -474,7 +474,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                            ])
 
     dp1_dbi_si_annual_mask_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_annual_mask_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\annual_mask\dp1_dbi_si_annual_mask_density_near_met.csv",
         index=False)
 
     # ---------------------------------------------- dry merge dp1 bbi -------------------------------------------------
@@ -490,7 +490,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                    ])
 
     dp1_dbi_si_dry_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry_density_near_df_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\dry\dp1_dbi_si_dry_density_near_df_near_met.csv",
         index=False)
 
 
@@ -506,7 +506,7 @@ def main_routine(biomass_csv, dir_, output_dir, dp0_dbg_si_single_annual_density
                                                         ])
 
     dp1_dbi_si_dry_mask_density_near_met.to_csv(
-        r"U:\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_dry_mask_density_near_met.csv",
+        r"C:\Users\robot\projects\biomasss\collated_zonal_stats\dry_mask\dp1_dbi_si_dry_mask_density_near_met.csv",
         index=False)
 
     return n_df1, dp0_dbg_si_single_annual_density_near_met, \
