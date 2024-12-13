@@ -68,7 +68,7 @@ pd.set_option('chained_assignment', None)
 
 
 def convert_int_to_float(df):
-    # converts interger stage code dbg surface reflectance data for landsat 5 & 7 
+    # converts integer stage code dbg surface reflectance data for landsat 5 & 7
     # to floating point for analysis of the vegetation index, blue band not used
 
     blue = ((df['psB1a'].astype('int16') * 0.0001) + 0.0)
@@ -78,6 +78,15 @@ def convert_int_to_float(df):
     swir1 = ((df['psB5a'].astype('int16') * 0.0001) + 0.0)
     swir2 = ((df['psB6a'].astype('int16') * 0.0001) + 0.0)
 
+    print("blue: ", blue)
+    print("green: ", green)
+    print("red: ", red)
+    print("nir: ", nir)
+    print("swir1: ", swir1)
+    print("swir2: ", swir2)
+
+    # import sys
+    # sys.exit()
     return blue, green, red, nir, swir1, swir2
 
 
@@ -121,6 +130,7 @@ def calculate_band_ratio(df):
 
 
 def calculate_veg_indices(df, blue, green, red, nir, swir1, swir2):
+
     # calculate the vegetation indices
     df['GSAVIfa'] = ((nir - green) / (nir + green + 0.5)) * (1.5)
     df['GSAVIa'] = np.int32(np.around(df['GSAVIfa'] * 10 ** 7))
@@ -217,7 +227,10 @@ def main_routine(df_all):
 
         print(df.columns)
         print(len(df.columns))
-        print("df: ", df)
+        #print("df: ", df)
+        #df.to_csv(r"C:\Users\robot\projects\biomass\scratch\check_df.csv", index=False)
+        # import sys
+        # sys.exit()
         column = ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
                   "psB1a", "psB2a", "psB3a", "psB4a", "psB5a", "psB6a", ]
         print(len(column))
@@ -229,9 +242,13 @@ def main_routine(df_all):
 
         blue, green, red, nir, swir1, swir2 = convert_int_to_float(df)
         df = calculate_band_ratio(df)
+        #df.to_csv(r"C:\Users\robot\projects\biomass\scratch\ratio.csv", index=False)
 
         df = calculate_veg_indices(df, blue, green, red, nir, swir1, swir2)
+        #df.to_csv(r"C:\Users\robot\projects\biomass\scratch\si_check.csv", index=False)
 
+        # import sys
+        # sys.exit()
         # remove fa values
         out_df = df[
             ['uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry', 'psB1a', 'psB2a', 'psB3a', 'psB4a',
@@ -240,11 +257,15 @@ def main_routine(df_all):
              'ratio64a', 'ratio65a', 'GSAVIa', 'GNDVIa', 'CVIa', 'NDGIa', 'RIa',
              'NBRa', 'NDIIa', 'GDVIa', 'MSAVIa', 'DVIa', 'SAVIa', 'NDVIa', 'MSRa']]
 
+
+        out_df.to_csv(r"C:\Users\robot\projects\biomass\scratch\out_df_si_check.csv", index=False)
         print(str_df)
         list_str = str_df.split("_")
         print(list_str)
         print("-" * 50)
 
+        # import sys
+        # sys.exit()
         column = [
             'uid', 'site_clean', "date", 'lon_gda94', 'lat_gda94', 'geometry',
             f'{list_str[0]}_psB1a', f'{list_str[0]}_psB2a', f'{list_str[0]}_psB3a', f'{list_str[0]}_psB4a',
@@ -305,6 +326,9 @@ def main_routine(df_all):
                          index=False)
 
     print(list(df_all_012345.columns))
+    
+    # import sys
+    # sys.exit()
 
     column = ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
               'bio_b_kg1ha',
@@ -438,7 +462,7 @@ def main_routine(df_all):
 
     #rename_col = {}
 
-    # todo remove temp dir
+    df_all_012345_clean.sort_values(by="uid", inplace=True)
     df_all_012345_clean.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\veg_ind\df_all_012345_clean.csv", index=False)
 
     # ==================================================================================================================
@@ -467,6 +491,7 @@ def main_routine(df_all):
          'dbg_NDGI', 'dbg_RI', 'dbg_NBR', 'dbg_NDII', 'dbg_GDVI', 'dbg_MSAVI', 'dbg_DVI', 'dbg_SAVI',
          'dbg_NDVI', 'dbg_MSR']]
 
+    dp0_dbg_si.sort_values(by="uid", inplace=True)
     dp0_dbg_si.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\single\dp0_dpg_si_single.csv", index=False)
 
     dp0_dbg_si_mask = df_all_012345_clean[
@@ -496,7 +521,12 @@ def main_routine(df_all):
          'dbgfm_NDGI', 'dbgfm_RI', 'dbgfm_NBR', 'dbgfm_NDII', 'dbgfm_GDVI', 'dbgfm_MSAVI', 'dbgfm_DVI',
          'dbgfm_SAVI', 'dbgfm_NDVI', 'dbgfm_MSR']]
 
-    dp0_dbg_si_mask.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dp0_dpg_si_mask_single.csv", index=False)
+    dp0_dbg_si_mask.sort_values(by="uid", inplace=True)
+    dp0_dbg_si_mask_rename = dp0_dbg_si_mask.copy()
+    # Rename columns by dropping "fm" from the names
+    dp0_dbg_si_mask_rename.columns = dp0_dbg_si_mask_rename.columns.str.replace('fm', '', regex=False)
+
+    dp0_dbg_si_mask_rename.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dp0_dpg_si_mask_single.csv", index=False)
 
     dp1_dbi_si_dry = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -529,7 +559,13 @@ def main_routine(df_all):
          'dbidry_CVI', 'dbidry_NDGI', 'dbidry_RI', 'dbidry_NBR', 'dbidry_NDII', 'dbidry_GDVI', 'dbidry_MSAVI',
          'dbidry_DVI', 'dbidry_SAVI', 'dbidry_NDVI', 'dbidry_MSR']]
 
-    dp1_dbi_si_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry.csv", index=False)
+    dp1_dbi_si_dry.sort_values(by="uid", inplace=True)
+
+    dp1_dbi_si_dry_rename = dp1_dbi_si_dry.copy()
+    # Rename columns by dropping "fm" from the names
+    dp1_dbi_si_dry_rename.columns = dp1_dbi_si_dry_rename.columns.str.replace('_dry', '', regex=False)
+    dp1_dbi_si_dry_rename.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry.csv", index=False)
+
 
     dp1_dbi_si_annual = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
@@ -555,14 +591,15 @@ def main_routine(df_all):
          'dbian_GNDVI', 'dbian_CVI', 'dbian_NDGI', 'dbian_RI', 'dbian_NBR', 'dbian_NDII', 'dbian_GDVI',
          'dbian_MSAVI', 'dbian_DVI', 'dbian_SAVI', 'dbian_NDVI', 'dbian_MSR']]
 
+    dp1_dbi_si_annual.sort_values(by="uid", inplace=True)
     dp1_dbi_si_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual\dp1_dbi_si_annual.csv", index=False)
 
     dp1_dbi_si_mask_dry = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
          'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
          'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt',
-         'b1_dbifm_dry_min', 'b1_dbifm_dry_max', 'b1_dbifm_dry_mean', 'b1_dbifm_dry_std', 'b1_dbifm_dry_med',
-         'b1_dbifm_dry_p25', 'b1_dbifm_dry_p50', 'b1_dbifm_dry_p75', 'b1_dbifm_dry_p95', 'b1_dbifm_dry_p99',
+         # 'b1_dbifm_dry_min', 'b1_dbifm_dry_max', 'b1_dbifm_dry_mean', 'b1_dbifm_dry_std', 'b1_dbifm_dry_med',
+         # 'b1_dbifm_dry_p25', 'b1_dbifm_dry_p50', 'b1_dbifm_dry_p75', 'b1_dbifm_dry_p95', 'b1_dbifm_dry_p99',
 
          'b1_dp1fm_dry_min', 'b1_dp1fm_dry_max', 'b1_dp1fm_dry_mean', 'b1_dp1fm_dry_std',
          'b1_dp1fm_dry_med',
@@ -594,8 +631,15 @@ def main_routine(df_all):
          'dbifmdry_RI', 'dbifmdry_NBR', 'dbifmdry_NDII', 'dbifmdry_GDVI', 'dbifmdry_MSAVI', 'dbifmdry_DVI',
          'dbifmdry_SAVI', 'dbifmdry_NDVI', 'dbifmdry_MSR']]
 
-    dp1_dbi_si_mask_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_mask_dry.csv", index=False)
+    dp1_dbi_si_mask_dry.sort_values(by="uid", inplace=True)
+    dp1_dbi_si_mask_dry_rename = dp1_dbi_si_mask_dry.copy()
+    # Rename columns by dropping "fm" from the names
+    dp1_dbi_si_mask_dry_rename.columns = dp1_dbi_si_mask_dry_rename.columns.str.replace('fm_dry', '', regex=False)
+    dp1_dbi_si_mask_dry_rename.columns = dp1_dbi_si_mask_dry_rename.columns.str.replace('fmdry', '', regex=False)
+    dp1_dbi_si_mask_dry_rename.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_mask_dry.csv", index=False)
 
+
+    #todo up to here changing names
     dp1_dbi_si_mask_annual = df_all_012345_clean[
         ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
          'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
@@ -625,10 +669,17 @@ def main_routine(df_all):
          'dbifman_NDII', 'dbifman_GDVI', 'dbifman_MSAVI', 'dbifman_DVI', 'dbifman_SAVI', 'dbifman_NDVI',
          'dbifman_MSR']]
 
-    dp1_dbi_si_mask_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_mask_annual.csv", index=False)
+    dp1_dbi_si_mask_annual.sort_values(by="uid", inplace=True)
+    dp1_dbi_si_mask_annual_rename = dp1_dbi_si_mask_annual.copy()
+    # Rename columns by dropping "fm" from the names
+    dp1_dbi_si_mask_annual_rename.columns = dp1_dbi_si_mask_annual_rename.columns.str.replace('fm', '', regex=False)
+
+    dp1_dbi_si_mask_annual_rename.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_mask_annual.csv", index=False)
+
 
     return df_all_012345, df_all_012345_clean, dp0_dbg_si, dp0_dbg_si_mask, dp1_dbi_si_dry, \
         dp1_dbi_si_mask_dry, dp1_dbi_si_annual, dp1_dbi_si_mask_annual
+
 
     if __name__ == '__main__':
         main_routine()

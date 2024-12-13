@@ -206,6 +206,7 @@ def workflow(dir_):
     ccw_list = []
     fdc_list = []
     h99_list = []
+    h25_list = []
     hcv_list = []
     hmc_list = []
     hsd_list = []
@@ -217,6 +218,7 @@ def workflow(dir_):
     ccw_mask_list = []
     fdc_mask_list = []
     h99_mask_list = []
+    h25_mask_list = []
     hcv_mask_list = []
     hmc_mask_list = []
     hsd_mask_list = []
@@ -293,6 +295,12 @@ def workflow(dir_):
                         h99 = seasonal_image_date(df1)
                         h99_list.append(h99)
 
+                    elif type_ == "h25":
+                        print("h25_" * 100)
+                        print(df1.columns)
+                        h25 = seasonal_image_date(df1)
+                        h25_list.append(h25)
+
                     elif type_ == "hcv":
                         print("HCV_" * 100)
                         print(df1.columns)
@@ -338,7 +346,7 @@ def workflow(dir_):
 
     print("fdc columns: ", fdc.columns)
 
-    return ccw_list, fdc_list, h99_list, hcv_list, hmc_list, hsd_list, n17_list, wdc_list, wfp_list
+    return ccw_list, fdc_list, h99_list, h25_list, hcv_list, hmc_list, hsd_list, n17_list, wdc_list, wfp_list
 
 
 def file_export(list_, output_dir, output_indv_dir, biomass_df, type_, mask):
@@ -673,7 +681,6 @@ def height_file_export(list_, output_dir, output_indv_dir, biomass_df, type_, ma
     print(site_list)
     dp1["site_clean"] = site_list
     dp1['site_clean'] = dp1['site_clean'].str.upper()
-
     # print(dp1)
 
     dry = dp1[dp1["s_month"] == 5]
@@ -706,7 +713,6 @@ def height_file_export(list_, output_dir, output_indv_dir, biomass_df, type_, ma
                 site_list.append(n)
 
             df["site_clean"] = site_list
-
             df['site_clean'] = df['site_clean'].str.upper()
             print("seasonal list: ", site_list)
 
@@ -725,7 +731,7 @@ def height_file_export(list_, output_dir, output_indv_dir, biomass_df, type_, ma
                       'b1_{0}_p99'.format(type_),
                       'image_dt', 'site_clean', 'image']]
 
-            print("h99 df1: ", df1)
+            print("df1: ", df1)
             print("+" * 100)
             print("df1 columns", df1.columns)
 
@@ -803,7 +809,9 @@ def height_class_file_export(list_, output_dir, output_indv_dir, biomass_df, typ
         site_list.append(n)
 
     dp1["site_clean"] = site_list
-    dp1['site_clean'] = dd1['site_clean'].str.upper()
+    dp1['site_clean'] = dp1['site_clean'].str.upper()
+
+    # print(dp1)
 
     dry = dp1[dp1["s_month"] == 5]
     annual = dp1[dp1["s_month"] == 1]
@@ -835,7 +843,6 @@ def height_class_file_export(list_, output_dir, output_indv_dir, biomass_df, typ
                 site_list.append(n)
 
             df["site_clean"] = site_list
-
             df['site_clean'] = df['site_clean'].str.upper()
             # print(df)
 
@@ -951,7 +958,12 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     print("biomass_df: ", biomass_df)
 
-    ccw_list, fdc_list, h99_list, hcv_list, hmc_list, hsd_list, n17_list, wdc_list, wfp_list = workflow(tile_dir)
+    ccw_list, fdc_list, h99_list, h25_list, hcv_list, hmc_list, hsd_list, n17_list, wdc_list, wfp_list = workflow(tile_dir)
+
+    # print("h25_list: ", h25_list)
+    # print(len(h25_list))
+    # import sys
+    # sys.exit("stop: h25_list")
 
     # --------------------------------------- no fire mask ------------------------------------------
 
@@ -1084,6 +1096,49 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         df_drop_h99_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_drop_h99_reformat.csv", index=False)
         df_h99_reformat.sort_values(by="uid", inplace=True)
         df_h99_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_h99_reformat.csv", index=False)
+
+    else:
+        pass
+
+    if len(h25_list) > 0:
+        # print(h25_list[0].columns)
+        merge_h25_list, merge_h25_dropna_list = height_file_export(h25_list, tile_export, tile_indv_export, biomass_df,
+                                                                   "h25", False)
+
+        df = pd.concat(merge_h25_list)
+        df_drop = pd.concat(merge_h25_dropna_list)
+        # print(df.shape)
+        # print(df.columns)
+        # print(df)
+        df.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\df_h25.csv")
+        # print(df_drop.shape)
+        # print(df_drop.shape)
+        df_drop.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\df_h25_dropna.csv")
+        # print(list(df_drop.columns))
+        new_columns = ['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha',
+                       'bio_t_kg1ha', 'bio_b_kg1ha',
+                       'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha',
+                       'c_t_kg1ha',
+                       'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt',
+                       'b1_h25_min', 'b1_h25_max', 'b1_h25_mean', 'b1_h25_std', 'b1_h25_med', 'b1_h25_p25',
+                       'b1_h25_p50', 'b1_h25_p75', 'b1_h25_p95', 'b1_h25_p99', 'image_dt', 'image', 'direction',
+                       'season']
+
+        df_drop_h25_reformat = df_drop[new_columns]
+        df_h25_reformat = df[new_columns]
+
+        df_drop_h25_reformat.rename(columns={"image_dt": "h25_dt",
+                                             "direction": "h25_dir",
+                                             "season": "h25_seas"}, inplace=True)
+
+        df_h25_reformat.rename(columns={"image_dt": "h25_dt",
+                                        "direction": "h25_dir",
+                                        "season": "h25_seas"}, inplace=True)
+
+        df_drop_h25_reformat.sort_values(by="uid", inplace=True)
+        df_drop_h25_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_drop_h25_reformat.csv", index=False)
+        df_h25_reformat.sort_values(by="uid", inplace=True)
+        df_h25_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_h25_reformat.csv", index=False)
 
     else:
         pass
@@ -1430,6 +1485,8 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     h99_annual = df_drop_h99_reformat[df_drop_h99_reformat["h99_seas"] == "annual"]
 
+    h25_annual = df_drop_h25_reformat[df_drop_h25_reformat["h25_seas"] == "annual"]
+
     hcv_annual = df_drop_hcv_reformat[df_drop_hcv_reformat["hcv_seas"] == "annual"]
 
     hmc_annual = df_drop_hmc_reformat[df_drop_hmc_reformat["hmc_seas"] == "annual"]
@@ -1479,61 +1536,556 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
     ccw_fdc_both.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_both.csv",
                         index=False)
 
+    # # -------------------------------------- Add h99 Annual only ---------------------------------------------------
+    #
+    # ccw_fdc_h99_dry = pd.merge(right=ccw_fdc_both, left=h99_annual, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h99_dry.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_dry.csv",
+    #                        index=False)
+    #
+    # #todo upto here below is wrong
+    #
+    # # -------------------------------------- Add h25 Annual only ---------------------------------------------------
+    #
+    # ccw_fdc_h99_h25_annual = pd.merge(right=ccw_fdc_h99_annual, left=h25_annual, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h99_h25_annual.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_h25_annual.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_annual.csv",
+    #                        index=False)
+    # # -------------------------------------- Add h25 Annual only ---------------------------------------------------
+    #
+    # ccw_fdc_h25_dry = pd.merge(right=ccw_fdc_both, left=h25_annual, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h25_dry.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h25_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h25_dry.csv",
+    #                        index=False)
+    # # --------------------------------------- Add hcv annual only ------------------------------------------------------
+    #
+    # ccw_fdc_h99_hcv = pd.merge(right=ccw_fdc_h99_dry, left=hcv_annual, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h99_hcv.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv.csv",
+    #                        index=False)
+    #
+    # # --------------------------------------------- Add hmc annual only ---------------------------
+    #
+    # ccw_fdc_h99_hcv_hmc = pd.merge(right=ccw_fdc_h99_hcv, left=hmc_annual, how="outer",
+    #                                on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                    'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                    'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                    'c_l_kg1ha', 'c_t_kg1ha',
+    #                                    'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
+    #                                    'c_agb_kg1ha', 'basal_dt'])
+    #
+    # ccw_fdc_h99_hcv_hmc.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv_hmc.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc.csv", index=False)
+    #
+    # # --------------------------------------------- Add hsd annual only ---------------------------
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd = pd.merge(right=ccw_fdc_h99_hcv_hmc, left=hsd_annual, how="outer",
+    #                                    on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                        'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                        'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                        'c_l_kg1ha', 'c_t_kg1ha',
+    #                                        'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
+    #                                        'c_agb_kg1ha', 'basal_dt'])
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv_hmc_hsd.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd.csv", index=False)
+    #
+    # # ------------------------------------------- n17 dry and annual --------------------------------------------------
+    #
+    # n17_both = pd.merge(right=n17_dry, left=n17_annual, how="outer",
+    #                     on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                         'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                         'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                         'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                         'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # n17_both.sort_values(by=['uid'], inplace=True)
+    # n17_both.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\n17_both.csv", index=False)
+    #
+    # # ----------------------------------------------- Add n17 both ----------------------------------------------------
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17 = pd.merge(right=ccw_fdc_h99_hcv_hmc_hsd, left=n17_both, how="outer",
+    #                                        on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                            'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                            'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                            'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                            'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                            'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv_hmc_hsd_n17.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17.csv",
+    #     index=False)
+    #
+    # # ------------------------------------------- wdc dry and annual --------------------------------------------------
+    #
+    # wdc_both = pd.merge(right=wdc_dry, left=wdc_annual, how="outer",
+    #                     on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                         'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                         'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                         'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                         'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # wdc_both.sort_values(by=['uid'], inplace=True)
+    # wdc_both.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\wdc_both.csv", index=False)
+    #
+    # # ----------------------------------------------- Add wdc both ----------------------------------------------------
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc = pd.merge(right=ccw_fdc_h99_hcv_hmc_hsd_n17, left=wdc_both, how="outer",
+    #                                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                                'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                                'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17_wdc.csv",
+    #     index=False)
+    #
+    # # ------------------------------------------- wfp dry and annual --------------------------------------------------
+    #
+    # wfp_both = pd.merge(right=wfp_dry, left=wfp_annual, how="outer",
+    #                     on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                         'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                         'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                         'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                         'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                         'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # wfp_both.sort_values(by=['uid'], inplace=True)
+    # wfp_both.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\wfp_both.csv", index=False)
+    #
+    # # ----------------------------------------------- Add wfp both ----------------------------------------------------
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp = pd.merge(right=ccw_fdc_h99_hcv_hmc_hsd_n17_wdc, left=wfp_both, how="outer",
+    #                                                on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94',
+    #                                                    'geometry',
+    #                                                    'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                                    'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                                    'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                                    'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                                    'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp.csv",
+    #     index=False)
+    #
+    # # print(list(ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp))
+    #
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean = ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp[[
+    #     'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
+    #     'bio_b_kg1ha',
+    #     'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #     'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt',
+    #     # ----------------------------------- wfp annual-----------------------------
+    #
+    #     'b1_wfp_min', 'b1_wfp_max', 'b1_wfp_mean', 'b1_wfp_std', 'b1_wfp_med', 'b1_wfp_p25', 'b1_wfp_p50', 'b1_wfp_p75',
+    #     'b1_wfp_p95', 'b1_wfp_p99',
+    #     'wfp_dt', 'wfp_dir', 'wfp_seas',
+    #     # ----------------------------------- wfp dry-----------------------------
+    #     'b1_wfp_dry_min',
+    #     'b1_wfp_dry_max', 'b1_wfp_dry_mean', 'b1_wfp_dry_std', 'b1_wfp_dry_med', 'b1_wfp_dry_p25', 'b1_wfp_dry_p50',
+    #     'b1_wfp_dry_p75', 'b1_wfp_dry_p95', 'b1_wfp_dry_p99',
+    #
+    #     # ------------------------------------- wdc annual -----------------------------
+    #     'b1_wdc_major', 'b1_wdc_minor',
+    #     # ------------------------------------- wdc dry ---------------------------------------------
+    #     'b1_wdc_dry_major', 'b1_wdc_dry_minor',
+    #     # ------------------------------------- n17 annual -----------------------------
+    #     'b1_n17_major', 'b1_n17_minor',
+    #     # ------------------------------------- n17 dry ------------------------------------
+    #     'b1_n17_dry_major', 'b1_n17_dry_minor',
+    #     # ----------------------------------- hsd annual-----------------------------
+    #     'b1_hsd_min', 'b1_hsd_max', 'b1_hsd_mean', 'b1_hsd_std', 'b1_hsd_med', 'b1_hsd_p25',
+    #     'b1_hsd_p50', 'b1_hsd_p75', 'b1_hsd_p95',
+    #     'b1_hsd_p99',
+    #     # ----------------------------------- hmc annual-----------------------------
+    #     'b1_hmc_min', 'b1_hmc_max',
+    #     'b1_hmc_mean', 'b1_hmc_std', 'b1_hmc_med', 'b1_hmc_p25', 'b1_hmc_p50', 'b1_hmc_p75',
+    #     'b1_hmc_p95', 'b1_hmc_p99',
+    #     # ----------------------------------- hcv annual-----------------------------
+    #     'b1_hcv_min', 'b1_hcv_max', 'b1_hcv_mean',
+    #     'b1_hcv_std', 'b1_hcv_med', 'b1_hcv_p25', 'b1_hcv_p50', 'b1_hcv_p75', 'b1_hcv_p95',
+    #     'b1_hcv_p99',  # 'hcv_dt',
+    #
+    #     # ----------------------------------- hcv annual-----------------------------
+    #     'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
+    #     'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
+    #
+    #     # ----------------------------------- fdc annual -----------------------------
+    #     'b1_fdc_major', 'b1_fdc_minor',
+    #     # ------------------------------------ fdc dry -------------------------------------
+    #     'b1_fdc_dry_major', 'b1_fdc_dry_minor',
+    #     # ----------------------------------- ccw annual -----------------------------
+    #     'b1_ccw_min', 'b1_ccw_max', 'b1_ccw_mean', 'b1_ccw_std', 'b1_ccw_med', 'b1_ccw_p25',
+    #     'b1_ccw_p50', 'b1_ccw_p75', 'b1_ccw_p95', 'b1_ccw_p99', 'ccw_dt', 'ccw_dir', 'ccw_seas',
+    #     # ----------------------------------- ccw dry ---------------------------------------------
+    #     'b1_ccw_dry_min', 'b1_ccw_dry_max', 'b1_ccw_dry_mean', 'b1_ccw_dry_std', 'b1_ccw_dry_med',
+    #     'b1_ccw_dry_p25', 'b1_ccw_dry_p50', 'b1_ccw_dry_p75', 'b1_ccw_dry_p95', 'b1_ccw_dry_p99',
+    # ]]
+    #
+    # print("before: ", list(ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.columns))
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.rename(
+    #     columns={'site_clean_x_x': 'site_clean'}, inplace=True)
+    #
+    # print("after: ", list(ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.columns))
+    # # import sys
+    # # sys.exit()
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.csv",
+    #     index=False)
+    #
+    # # ===================================================================================================================
+    #
+    # annual = ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp[[
+    #     'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
+    #     'bio_b_kg1ha',
+    #     'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #     'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt',
+    #     # ----------------------------------- wfp annual-----------------------------
+    #
+    #     'b1_wfp_min', 'b1_wfp_max', 'b1_wfp_mean', 'b1_wfp_std', 'b1_wfp_med', 'b1_wfp_p25', 'b1_wfp_p50', 'b1_wfp_p75',
+    #     'b1_wfp_p95', 'b1_wfp_p99',
+    #     'wfp_dt', 'wfp_dir', 'wfp_seas',
+    #     # ------------------------------------- wdc annual -----------------------------
+    #     'b1_wdc_major', 'b1_wdc_minor',
+    #     # ------------------------------------- n17 annual -----------------------------
+    #     'b1_n17_major', 'b1_n17_minor',
+    #     # ----------------------------------- hsd annual-----------------------------
+    #     'b1_hsd_min', 'b1_hsd_max', 'b1_hsd_mean', 'b1_hsd_std', 'b1_hsd_med', 'b1_hsd_p25',
+    #     'b1_hsd_p50', 'b1_hsd_p75', 'b1_hsd_p95',
+    #     'b1_hsd_p99',
+    #     # ----------------------------------- hmc annual-----------------------------
+    #     'b1_hmc_min', 'b1_hmc_max',
+    #     'b1_hmc_mean', 'b1_hmc_std', 'b1_hmc_med', 'b1_hmc_p25', 'b1_hmc_p50', 'b1_hmc_p75',
+    #     'b1_hmc_p95', 'b1_hmc_p99',
+    #     # ----------------------------------- hcv annual-----------------------------
+    #     'b1_hcv_min', 'b1_hcv_max', 'b1_hcv_mean',
+    #     'b1_hcv_std', 'b1_hcv_med', 'b1_hcv_p25', 'b1_hcv_p50', 'b1_hcv_p75', 'b1_hcv_p95',
+    #     'b1_hcv_p99',  # 'hcv_dt',
+    #     # ----------------------------------- hcv annual-----------------------------
+    #     'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
+    #     'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
+    #     # ----------------------------------- fdc annual -----------------------------
+    #     'b1_fdc_major', 'b1_fdc_minor',
+    #     # ----------------------------------- ccw annual -----------------------------
+    #     'b1_ccw_min', 'b1_ccw_max', 'b1_ccw_mean', 'b1_ccw_std', 'b1_ccw_med', 'b1_ccw_p25',
+    #     'b1_ccw_p50', 'b1_ccw_p75', 'b1_ccw_p95', 'b1_ccw_p99', 'ccw_dt', 'ccw_dir', 'ccw_seas']]
+    #
+    # dry_season = ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp[[
+    #     'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
+    #     'bio_b_kg1ha',
+    #     'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #     'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt',
+    #     # ----------------------------------- wfp dry-----------------------------
+    #     'b1_wfp_dry_min',
+    #     'b1_wfp_dry_max', 'b1_wfp_dry_mean', 'b1_wfp_dry_std', 'b1_wfp_dry_med', 'b1_wfp_dry_p25', 'b1_wfp_dry_p50',
+    #     'b1_wfp_dry_p75', 'b1_wfp_dry_p95', 'b1_wfp_dry_p99',
+    #     # ------------------------------------- wdc dry ---------------------------------------------
+    #     'b1_wdc_dry_major', 'b1_wdc_dry_minor',
+    #     # ------------------------------------- n17 dry ------------------------------------
+    #     'b1_n17_dry_major', 'b1_n17_dry_minor',
+    #     # ----------------------------------- hsd annual-----------------------------
+    #     'b1_hsd_min', 'b1_hsd_max', 'b1_hsd_mean', 'b1_hsd_std', 'b1_hsd_med', 'b1_hsd_p25',
+    #     'b1_hsd_p50', 'b1_hsd_p75', 'b1_hsd_p95',
+    #     'b1_hsd_p99',
+    #     # ----------------------------------- hmc annual-----------------------------
+    #     'b1_hmc_min', 'b1_hmc_max',
+    #     'b1_hmc_mean', 'b1_hmc_std', 'b1_hmc_med', 'b1_hmc_p25', 'b1_hmc_p50', 'b1_hmc_p75',
+    #     'b1_hmc_p95', 'b1_hmc_p99',
+    #     # ----------------------------------- hcv annual-----------------------------
+    #     'b1_hcv_min', 'b1_hcv_max', 'b1_hcv_mean',
+    #     'b1_hcv_std', 'b1_hcv_med', 'b1_hcv_p25', 'b1_hcv_p50', 'b1_hcv_p75', 'b1_hcv_p95',
+    #     'b1_hcv_p99',  # 'hcv_dt',
+    #
+    #     # ----------------------------------- hcv annual-----------------------------
+    #     'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
+    #     'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
+    #
+    #     # ------------------------------------ fdc dry -------------------------------------
+    #     'b1_fdc_dry_major', 'b1_fdc_dry_minor',
+    #     # ----------------------------------- ccw dry ---------------------------------------------
+    #     'b1_ccw_dry_min', 'b1_ccw_dry_max', 'b1_ccw_dry_mean', 'b1_ccw_dry_std', 'b1_ccw_dry_med',
+    #     'b1_ccw_dry_p25', 'b1_ccw_dry_p50', 'b1_ccw_dry_p75', 'b1_ccw_dry_p95', 'b1_ccw_dry_p99']]
+    #
+    # # ==================================================================================================================
+    # # --------------------------------------------- annual merge -------------------------------------------------------
+    # dp0_dbg_si_single_annual_density = pd.merge(right=dp0_dbg_si, left=annual, how="outer",
+    #                                             on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                                 'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                                 'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                                 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                                 'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                                 'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp0_dbg_si_single_annual_density.sort_values(by=['uid'], inplace=True)
+    # dp0_dbg_si_single_annual_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\single\dp0_dbg_si_single_annual_density.csv",
+    #     index=False)
+    #
+    # dp0_dbg_si_mask_single_annual_density = pd.merge(right=dp0_dbg_si_mask, left=annual, how="outer",
+    #                                                  on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94',
+    #                                                      'geometry',
+    #                                                      'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                                      'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                                      'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                                      'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                                      'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp0_dbg_si_mask_single_annual_density.sort_values(by=['uid'], inplace=True)
+    # dp0_dbg_si_mask_single_annual_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_annual_density.csv",
+    #     index=False)
+    #
+    # # ------------------------------------------------------ dry merge -------------------------------------------------
+    #
+    # dp0_dbg_si_single_dry_density = pd.merge(right=dp0_dbg_si, left=dry_season, how="outer",
+    #                                          on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                              'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                              'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                              'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                              'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                              'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp0_dbg_si_single_dry_density.sort_values(by=['uid'], inplace=True)
+    # dp0_dbg_si_single_dry_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\single\dp0_dbg_si_single_dry_density.csv",
+    #     index=False)
+    #
+    # dp0_dbg_si_mask_single_dry_density = pd.merge(right=dp0_dbg_si_mask, left=dry_season, how="outer",
+    #                                               on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                                   'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                                   'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                                   'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                                   'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                                   'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp0_dbg_si_mask_single_dry_density.sort_values(by=['uid'], inplace=True)
+    # dp0_dbg_si_mask_single_dry_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\single_mask\dp0_dbg_si_mask_single_dry_density.csv",
+    #     index=False)
+    #
+    # # ------------------------------------------------------ annual merge dp1 bbi --------------------------------------
+    #
+    # dp1_dbi_si_annual_density = pd.merge(right=dp1_dbi_si_annual, left=annual, how="outer",
+    #                                      on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                          'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                          'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                          'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                          'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                          'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp1_dbi_si_annual_density.sort_values(by=['uid'], inplace=True)
+    # dp1_dbi_si_annual_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual\dp1_dbi_si_annual_density.csv",
+    #     index=False)
+    #
+    # dp1_dbi_si_annual_mask_density = pd.merge(right=dp1_dbi_si_mask_annual, left=annual, how="outer",
+    #                                           on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                               'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                               'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                               'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                               'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                               'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp1_dbi_si_annual_mask_density.sort_values(by=['uid'], inplace=True)
+    # dp1_dbi_si_annual_mask_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\annual_mask\dp1_dbi_si_annual_mask_density.csv",
+    #     index=False)
+    #
+    # # ---------------------------------------------- dry merge dp1 bbi -------------------------------------------------
+    #
+    # dp1_dbi_si_dry_density = pd.merge(right=dp1_dbi_si_dry, left=dry_season, how="outer",
+    #                                   on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                       'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                       'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                       'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                       'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                       'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp1_dbi_si_dry_density.sort_values(by=['uid'], inplace=True)
+    # dp1_dbi_si_dry_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry\dp1_dbi_si_dry_density.csv",
+    #     index=False)
+    #
+    # dp1_dbi_si_dry_mask_density = pd.merge(right=dp1_dbi_si_mask_dry, left=dry_season, how="outer",
+    #                                        on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                            'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                            'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+    #                                            'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+    #                                            'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+    #                                            'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    #
+    # dp1_dbi_si_dry_mask_density.sort_values(by=['uid'], inplace=True)
+    # dp1_dbi_si_dry_mask_density.to_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_dry_mask_density.csv",
+    #     index=False)
+    #
+    # return biomass_df, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean, \
+    #     dp0_dbg_si_single_annual_density, dp0_dbg_si_mask_single_annual_density, dp0_dbg_si_single_dry_density, \
+    #     dp0_dbg_si_mask_single_dry_density, dp1_dbi_si_annual_density, dp1_dbi_si_annual_mask_density, \
+    #     dp1_dbi_si_dry_density, dp1_dbi_si_dry_mask_density
+
     # -------------------------------------- Add h99 Annual only ---------------------------------------------------
 
-    ccw_fdc_h99_dry = pd.merge(right=ccw_fdc_both, left=h99_annual, how="outer",
-                               on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
-                                   'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                   'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
-                                   'c_l_kg1ha', 'c_t_kg1ha',
-                                   'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
-                                   'basal_dt'])
+    ccw_fdc_h99_annual = pd.merge(right=ccw_fdc_both, left=h99_annual, how="outer",
+                                  on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+                                      'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                      'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+                                      'c_l_kg1ha', 'c_t_kg1ha',
+                                      'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+                                      'basal_dt'])
 
-    ccw_fdc_h99_dry.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_dry.csv",
-                           index=False)
+    ccw_fdc_h99_annual.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_annual.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_annual.csv",
+        index=False)
+
+    # # --------------------------------------- Add h99 dry only ------------------------------------------------------
+    #
+    # ccw_fdc_h99_dry = pd.merge(right=ccw_fdc_both, left=h99_dry, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h99_dry.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_dry.csv",
+    #                        index=False)
+
+    # -------------------------------------- Add h25 Annual only ---------------------------------------------------
+
+    ccw_fdc_h99_h25_annual = pd.merge(right=ccw_fdc_h99_annual, left=h25_annual, how="outer",
+                                      on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+                                          'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                          'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+                                          'c_l_kg1ha', 'c_t_kg1ha',
+                                          'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
+                                          'c_agb_kg1ha',
+                                          'basal_dt'])
+
+    ccw_fdc_h99_h25_annual.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_annual.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_annual.csv",
+        index=False)
+
+    # # --------------------------------------- Add h25 dry only ------------------------------------------------------
+    #
+    # ccw_fdc_h99_h25_dry = pd.merge(right=ccw_fdc_h99_dry, left=h25_dry, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h99_h25_dry.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h99_h25_dry.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_dry.csv",
+    #                        index=False)
 
     # --------------------------------------- Add hcv annual only ------------------------------------------------------
 
-    ccw_fdc_h99_hcv = pd.merge(right=ccw_fdc_h99_dry, left=hcv_annual, how="outer",
-                               on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
-                                   'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                   'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
-                                   'c_l_kg1ha', 'c_t_kg1ha',
-                                   'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
-                                   'basal_dt'])
+    ccw_fdc_h99_h25_hcv_annual = pd.merge(right=ccw_fdc_h99_h25_annual, left=hcv_annual, how="outer",
+                                          on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+                                              'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                              'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+                                              'bio_agb_kg1ha',
+                                              'c_l_kg1ha', 'c_t_kg1ha',
+                                              'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
+                                              'c_agb_kg1ha',
+                                              'basal_dt'])
 
-    ccw_fdc_h99_hcv.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv.csv",
-                           index=False)
+    ccw_fdc_h99_h25_hcv_annual.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_hcv_annual.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_annual.csv",
+        index=False)
+
+    # import sys
+    # sys.exit()
+
+    # # --------------------------------------- Add hcv dry only ------------------------------------------------------
+    #
+    # ccw_fdc_h95_h25_hcv = pd.merge(right=ccw_fdc_h99_h25_dry, left=hcv_dry, how="outer",
+    #                            on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+    #                                'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+    #                                'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
+    #                                'c_l_kg1ha', 'c_t_kg1ha',
+    #                                'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha', 'c_agb_kg1ha',
+    #                                'basal_dt'])
+    #
+    # ccw_fdc_h95_h25_hcv.sort_values(by=['uid'], inplace=True)
+    # ccw_fdc_h95_h25_hcv.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_hcv_dry.csv",
+    #                        index=False)
 
     # --------------------------------------------- Add hmc annual only ---------------------------
 
-    ccw_fdc_h99_hcv_hmc = pd.merge(right=ccw_fdc_h99_hcv, left=hmc_annual, how="outer",
-                                   on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
-                                       'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                       'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
-                                       'c_l_kg1ha', 'c_t_kg1ha',
-                                       'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
-                                       'c_agb_kg1ha', 'basal_dt'])
+    ccw_fdc_h25_h99_hcv_hmc_annual = pd.merge(right=ccw_fdc_h99_h25_hcv_annual, left=hmc_annual, how="outer",
+                                              on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+                                                  'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                                  'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+                                                  'bio_agb_kg1ha',
+                                                  'c_l_kg1ha', 'c_t_kg1ha',
+                                                  'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
+                                                  'c_agb_kg1ha', 'basal_dt'])
 
-    ccw_fdc_h99_hcv_hmc.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv_hmc.to_csv(
-        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc.csv", index=False)
+    ccw_fdc_h25_h99_hcv_hmc_annual.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h25_h99_hcv_hmc_annual.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h25_h99_hcv_hmc_annual.csv",
+        index=False)
 
     # --------------------------------------------- Add hsd annual only ---------------------------
 
-    ccw_fdc_h99_hcv_hmc_hsd = pd.merge(right=ccw_fdc_h99_hcv_hmc, left=hsd_annual, how="outer",
-                                       on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
-                                           'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                           'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha',
-                                           'c_l_kg1ha', 'c_t_kg1ha',
-                                           'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
-                                           'c_agb_kg1ha', 'basal_dt'])
+    ccw_fdc_h99_h25_hcv_hmc_hsd_annual = pd.merge(right=ccw_fdc_h25_h99_hcv_hmc_annual, left=hsd_annual, how="outer",
+                                                  on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+                                                      'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                                      'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+                                                      'bio_agb_kg1ha',
+                                                      'c_l_kg1ha', 'c_t_kg1ha',
+                                                      'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha', 'c_r_kg1ha',
+                                                      'c_agb_kg1ha', 'basal_dt'])
 
-    ccw_fdc_h99_hcv_hmc_hsd.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv_hmc_hsd.to_csv(
-        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd.csv", index=False)
+    ccw_fdc_h99_h25_hcv_hmc_hsd_annual.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_hcv_hmc_hsd_annual.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_hcv_hmc_hsd_annual.csv",
+        index=False)
 
     # ------------------------------------------- n17 dry and annual --------------------------------------------------
 
@@ -1550,17 +2102,17 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     # ----------------------------------------------- Add n17 both ----------------------------------------------------
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17 = pd.merge(right=ccw_fdc_h99_hcv_hmc_hsd, left=n17_both, how="outer",
-                                           on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
-                                               'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                               'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
-                                               'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
-                                               'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
-                                               'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17 = pd.merge(right=ccw_fdc_h99_h25_hcv_hmc_hsd_annual, left=n17_both, how="outer",
+                                               on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
+                                                   'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                                   'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+                                                   'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+                                                   'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+                                                   'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv_hmc_hsd_n17.to_csv(
-        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17.csv",
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_hcv_hmc_hsd_n17.csv",
         index=False)
 
     # ------------------------------------------- wdc dry and annual --------------------------------------------------
@@ -1578,17 +2130,18 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     # ----------------------------------------------- Add wdc both ----------------------------------------------------
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc = pd.merge(right=ccw_fdc_h99_hcv_hmc_hsd_n17, left=wdc_both, how="outer",
-                                               on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry',
-                                                   'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                                   'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
-                                                   'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
-                                                   'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
-                                                   'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc = pd.merge(right=ccw_fdc_h99_h25_hcv_hmc_hsd_n17, left=wdc_both, how="outer",
+                                                   on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94',
+                                                       'geometry',
+                                                       'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                                       'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+                                                       'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+                                                       'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+                                                       'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc.to_csv(
-        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17_wdc.csv",
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc.csv",
         index=False)
 
     # ------------------------------------------- wfp dry and annual --------------------------------------------------
@@ -1606,23 +2159,24 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     # ----------------------------------------------- Add wfp both ----------------------------------------------------
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp = pd.merge(right=ccw_fdc_h99_hcv_hmc_hsd_n17_wdc, left=wfp_both, how="outer",
-                                                   on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94',
-                                                       'geometry',
-                                                       'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
-                                                       'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
-                                                       'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
-                                                       'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
-                                                       'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp = pd.merge(right=ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc, left=wfp_both,
+                                                       how="outer",
+                                                       on=['uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94',
+                                                           'geometry',
+                                                           'bio_l_kg1ha', 'bio_t_kg1ha', 'bio_b_kg1ha',
+                                                           'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha',
+                                                           'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
+                                                           'c_b_kg1ha', 'c_w_kg1ha', 'c_br_kg1ha', 'c_s_kg1ha',
+                                                           'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'])
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp.to_csv(
-        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp.csv",
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp.csv",
         index=False)
 
     # print(list(ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp))
 
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean = ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp[[
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean = ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp[[
         'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
         'bio_b_kg1ha',
         'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
@@ -1645,6 +2199,7 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         'b1_n17_major', 'b1_n17_minor',
         # ------------------------------------- n17 dry ------------------------------------
         'b1_n17_dry_major', 'b1_n17_dry_minor',
+
         # ----------------------------------- hsd annual-----------------------------
         'b1_hsd_min', 'b1_hsd_max', 'b1_hsd_mean', 'b1_hsd_std', 'b1_hsd_med', 'b1_hsd_p25',
         'b1_hsd_p50', 'b1_hsd_p75', 'b1_hsd_p95',
@@ -1658,9 +2213,13 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         'b1_hcv_std', 'b1_hcv_med', 'b1_hcv_p25', 'b1_hcv_p50', 'b1_hcv_p75', 'b1_hcv_p95',
         'b1_hcv_p99',  # 'hcv_dt',
 
-        # ----------------------------------- hcv annual-----------------------------
+        # ----------------------------------- h99 annual-----------------------------
         'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
         'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
+
+        # ----------------------------------- h25 annual-----------------------------
+        'b1_h25_min', 'b1_h25_max', 'b1_h25_mean', 'b1_h25_std',
+        'b1_h25_med', 'b1_h25_p25', 'b1_h25_p50', 'b1_h25_p75', 'b1_h25_p95', 'b1_h25_p99',
 
         # ----------------------------------- fdc annual -----------------------------
         'b1_fdc_major', 'b1_fdc_minor',
@@ -1674,21 +2233,21 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         'b1_ccw_dry_p25', 'b1_ccw_dry_p50', 'b1_ccw_dry_p75', 'b1_ccw_dry_p95', 'b1_ccw_dry_p99',
     ]]
 
-    print("before: ", list(ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.columns))
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.rename(
+    print("before: ", list(ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean.columns))
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean.rename(
         columns={'site_clean_x_x': 'site_clean'}, inplace=True)
 
-    print("after: ", list(ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.columns))
+    print("after: ", list(ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean.columns))
     # import sys
     # sys.exit()
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.sort_values(by=['uid'], inplace=True)
-    ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.to_csv(
-        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean.csv",
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean.sort_values(by=['uid'], inplace=True)
+    ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean.to_csv(
+        r"C:\Users\robot\projects\biomass\collated_zonal_stats\density_height\ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean.csv",
         index=False)
 
     # ===================================================================================================================
 
-    annual = ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp[[
+    annual = ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp[[
         'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
         'bio_b_kg1ha',
         'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
@@ -1714,16 +2273,19 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         'b1_hcv_min', 'b1_hcv_max', 'b1_hcv_mean',
         'b1_hcv_std', 'b1_hcv_med', 'b1_hcv_p25', 'b1_hcv_p50', 'b1_hcv_p75', 'b1_hcv_p95',
         'b1_hcv_p99',  # 'hcv_dt',
-        # ----------------------------------- hcv annual-----------------------------
+        # ----------------------------------- h99 annual-----------------------------
         'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
         'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
+        # ----------------------------------- h25 annual-----------------------------
+        'b1_h25_min', 'b1_h25_max', 'b1_h25_mean', 'b1_h25_std',
+        'b1_h25_med', 'b1_h25_p25', 'b1_h25_p50', 'b1_h25_p75', 'b1_h25_p95', 'b1_h25_p99',
         # ----------------------------------- fdc annual -----------------------------
         'b1_fdc_major', 'b1_fdc_minor',
         # ----------------------------------- ccw annual -----------------------------
         'b1_ccw_min', 'b1_ccw_max', 'b1_ccw_mean', 'b1_ccw_std', 'b1_ccw_med', 'b1_ccw_p25',
         'b1_ccw_p50', 'b1_ccw_p75', 'b1_ccw_p95', 'b1_ccw_p99', 'ccw_dt', 'ccw_dir', 'ccw_seas']]
 
-    dry_season = ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp[[
+    dry_season = ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp[[
         'uid', 'site_clean', 'date', 'lon_gda94', 'lat_gda94', 'geometry', 'bio_l_kg1ha', 'bio_t_kg1ha',
         'bio_b_kg1ha',
         'bio_w_kg1ha', 'bio_br_kg1ha', 'bio_s_kg1ha', 'bio_r_kg1ha', 'bio_agb_kg1ha', 'c_l_kg1ha', 'c_t_kg1ha',
@@ -1749,9 +2311,13 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         'b1_hcv_std', 'b1_hcv_med', 'b1_hcv_p25', 'b1_hcv_p50', 'b1_hcv_p75', 'b1_hcv_p95',
         'b1_hcv_p99',  # 'hcv_dt',
 
-        # ----------------------------------- hcv annual-----------------------------
+        # ----------------------------------- h99 annual-----------------------------
         'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
         'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
+
+        # ----------------------------------- h99 annual-----------------------------
+        'b1_h25_min', 'b1_h25_max', 'b1_h25_mean', 'b1_h25_std',
+        'b1_h25_med', 'b1_h25_p25', 'b1_h25_p50', 'b1_h25_p75', 'b1_h25_p95', 'b1_h25_p99',
 
         # ------------------------------------ fdc dry -------------------------------------
         'b1_fdc_dry_major', 'b1_fdc_dry_minor',
@@ -1872,11 +2438,10 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         r"C:\Users\robot\projects\biomass\collated_zonal_stats\dry_mask\dp1_dbi_si_dry_mask_density.csv",
         index=False)
 
-    return biomass_df, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean, \
+    return biomass_df, ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp, ccw_fdc_h99_h25_hcv_hmc_hsd_n17_wdc_wfp_clean, \
         dp0_dbg_si_single_annual_density, dp0_dbg_si_mask_single_annual_density, dp0_dbg_si_single_dry_density, \
         dp0_dbg_si_mask_single_dry_density, dp1_dbi_si_annual_density, dp1_dbi_si_annual_mask_density, \
         dp1_dbi_si_dry_density, dp1_dbi_si_dry_mask_density
-
 
 if __name__ == '__main__':
     main_routine()

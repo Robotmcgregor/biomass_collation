@@ -91,6 +91,44 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 
+#
+# def get_cmd_args_fn():
+#     p = argparse.ArgumentParser(
+#         description='''Input a single or multi-band raster to extracts the values from the input shapefile. ''')
+#
+#     p.add_argument('-b', '--biomass_csv', help='Biomass csv filepath.')
+#
+#     p.add_argument('-t', '--tile_dir',
+#                    help="Path to the tile zonal stats directory.",
+#                    default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\dbi")
+#
+#     p.add_argument('-fd', '--fire_dir',
+#                    help="Path to the mosaic fire scar zonal stats directory.",
+#                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240723_1008",
+#                    default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\fire")
+#
+#     p.add_argument('-m', '--met_dir',
+#                    help="Path to the meteorological data zonal stats directory.",
+#                    default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean")
+#
+#     # p.add_argument('-ms', '--met_si_dir',
+#     #                help="Path to the meteorological data zonal stats directory.",
+#     #                default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean")
+#
+#     p.add_argument('-d', '--density_dir',
+#                    help="Path to the tile height and density zonal stats directory.",
+#                    default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\density")
+#
+#     p.add_argument('-o', '--output_dir',
+#                    help="Pipeline export directory.", default=r"C:\Users\robot\projects\outputs\biomass_collation_biolib")
+#     cmd_args = p.parse_args()
+#
+#     if cmd_args.biomass_csv is None:
+#         p.print_help()
+#
+#         sys.exit()
+#
+#     return cmd_args
 
 def get_cmd_args_fn():
     p = argparse.ArgumentParser(
@@ -100,26 +138,33 @@ def get_cmd_args_fn():
 
     p.add_argument('-t', '--tile_dir',
                    help="Path to the tile zonal stats directory.",
+                   #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\dbi",
                    default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\dbi")
 
-    p.add_argument('-mo', '--mosaic_dir',
+    p.add_argument('-fd', '--fire_dir',
                    help="Path to the mosaic fire scar zonal stats directory.",
-                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire\rmcgr_nt_fire_scars_20240613_1414")
+                   #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240723_1008",
+                   default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240801_0927_nafi_only")
 
     p.add_argument('-m', '--met_dir',
                    help="Path to the meteorological data zonal stats directory.",
-                   default=r"U:\biomass\raw_zonal_stats\met\collation\slats_tern")
+                   #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean",
+                   default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024")
 
-    p.add_argument('-ms', '--met_si_dir',
-                   help="Path to the meteorological data zonal stats directory.",
-                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean")
+    # p.add_argument('-ms', '--met_si_dir',
+    #                help="Path to the meteorological data zonal stats directory.",
+    #                default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean")
 
     p.add_argument('-d', '--density_dir',
                    help="Path to the tile height and density zonal stats directory.",
-                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\density")
+                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\density",
+                   #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\density",
+                   )
 
     p.add_argument('-o', '--output_dir',
-                   help="Pipeline export directory.", default=r"C:\Users\robot\projects\outputs\biomass_collation")
+                   help="Pipeline export directory.",
+                   #default=r"C:\Users\robot\projects\outputs\biomass_collation_biolib",
+                   default=r"C:\Users\robot\projects\outputs\biomass_collation")
 
     cmd_args = p.parse_args()
 
@@ -129,7 +174,6 @@ def get_cmd_args_fn():
         sys.exit()
 
     return cmd_args
-
 
 def temporary_dir_fn():
     """ Create a temporary directory 'user_YYYMMDD_HHMM'.
@@ -174,7 +218,7 @@ def export_file_path_fn(output_dir, final_user):
     date_time_replace = str(datetime.now()).replace('-', '')
     date_time_list = date_time_replace.split(' ')
     date_time_list_split = date_time_list[1].split(':')
-    output_dir_path = output_dir + '\\' + final_user + '_collation_tile_data_' + str(
+    output_dir_path = output_dir + '\\' + final_user + '_collation_tile_data_previous_fire' + str(
         date_time_list[0]) + '_' + str(
         date_time_list_split[0]) + str(
         date_time_list_split[1])
@@ -218,12 +262,12 @@ def main_routine():
     cmd_args = get_cmd_args_fn()
     biomass_csv = cmd_args.biomass_csv
     tile_dir = cmd_args.tile_dir
-    # fire_dir = cmd_args.fire_dir
+    fire_dir = cmd_args.fire_dir
     density_dir = cmd_args.density_dir
     output_dir = cmd_args.output_dir
     met_dir = cmd_args.met_dir
-    met_si_dir = cmd_args.met_si_dir
-    mosaic_dir = cmd_args.mosaic_dir
+    # met_si_dir = cmd_args.met_si_dir
+    # mosaic_dir = cmd_args.mosaic_dir
 
     # call the temporaryDir function.
     temp_dir_path, final_user = temporary_dir_fn()
@@ -233,7 +277,7 @@ def main_routine():
     sr_fc_zonal_stats, ht_dn_zonal_stats, met_zonal_stats, met_si = export_folders(output_dir_path)
 
 
-    print("1 - line 236")
+    # print("1 - line 236")
     # import sys
     # sys.exit()
     # todo working uncomment out
@@ -243,35 +287,60 @@ def main_routine():
         dbg_dp0_single, dbg_dp0_mask_single = step2_merge_tile_zonal_stats.main_routine(
         biomass_csv, tile_dir, sr_fc_zonal_stats)
 
+    print("dbg_dbi_dbi_mask_dp0_dp1_dp1_mask: ", dbg_dbi_dbi_mask_dp0_dp1_dp1_mask.shape)
+    print("dbi_dp1_dry: ", dbi_dp1_dry.shape)
     print("=" * 100)
     print("=" * 100)
     print("step2_merge_tile_zonal_stats - COMPLETE")
     print("=" * 100)
     print("=" * 100)
 
+    # print("1 - line 252")
+    # import sys
+    # sys.exit()
+
+    #todo issue ouputting csv
+    
     import step3_calculate_indices
     dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_veg_ind, dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_veg_ind_clean, \
         dp0_dbg_si, dp0_dbg_si_mask, dp1_dbi_si_dry, dp1_dbi_si_mask_dry, dp1_dbi_si_annual, \
         dp1_dbi_si_mask_annual = step3_calculate_indices.main_routine(
         dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_clean)
 
+
+    print("dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_veg_ind: ", dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_veg_ind.shape)
+    print("dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_veg_ind_clean: ", dbg_dbi_dbi_mask_dp0_dp1_dp1_mask_veg_ind_clean.shape)
     print("=" * 100)
     print("=" * 100)
-    print("step3_merge_tile_density_height_zonal_stats - COMPLETE")
+    print("step3_calculate_indices - COMPLETE")
     print("=" * 100)
     print("=" * 100)
 
-    print("1 - line 264")
-    import sys
-    sys.exit()
+    # import sys
+    # sys.exit("1 - line 268")
+
+    print(biomass_csv)
+    print(density_dir)
+    print(ht_dn_zonal_stats)
+
+    # # todo working produces a final output uncomment out
+    # import step4_merge_tile_density_height_zonal_stats
+    # biomass_df, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean, \
+    #     dp0_dbg_si_single_annual_density, dp0_dbg_si_mask_single_annual_density, dp0_dbg_si_single_dry_density, \
+    #     dp0_dbg_si_mask_single_dry_density, dp1_dbi_si_annual_density, dp1_dbi_si_annual_mask_density, \
+    #     dp1_dbi_si_dry_density, \
+    #     dp1_dbi_si_dry_mask_density = step4_merge_tile_density_height_zonal_stats.main_routine(biomass_csv,
+    #                                                                                                 density_dir,
+    #                                                                                                 ht_dn_zonal_stats,
+    #
 
     # todo working produces a final output uncomment out
-    import step4_merge_tile_density_height_zonal_stats
+    import step4_merge_tile_density_height_zonal_stats_wh25
     biomass_df, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp, ccw_fdc_h99_hcv_hmc_hsd_n17_wdc_wfp_clean, \
         dp0_dbg_si_single_annual_density, dp0_dbg_si_mask_single_annual_density, dp0_dbg_si_single_dry_density, \
         dp0_dbg_si_mask_single_dry_density, dp1_dbi_si_annual_density, dp1_dbi_si_annual_mask_density, \
         dp1_dbi_si_dry_density, \
-        dp1_dbi_si_dry_mask_density = step4_merge_tile_density_height_zonal_stats.main_routine(biomass_csv,
+        dp1_dbi_si_dry_mask_density = step4_merge_tile_density_height_zonal_stats_wh25.main_routine(biomass_csv,
                                                                                                density_dir,
                                                                                                ht_dn_zonal_stats,
                                                                                                dp0_dbg_si,
@@ -284,16 +353,17 @@ def main_routine():
 
 
 
-    print("Finish 1 - line 279 - sr and density only")
-    import sys
-    sys.exit()
+    # print("Finish 1 - line 279 - sr and density only")
+    # import sys
+    # sys.exit()
     print("=" * 100)
     print("=" * 100)
     print("step3_merge_tile_density_height_zonal_stats - COMPLETE")
     print("=" * 100)
     print("=" * 100)
 
-    import step4_merge_meteorological_data_agb_zonal_stats
+    #biomass_csv.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\biomass_csv.csv", index=False)
+    import step5_merge_meteorological_data_agb_zonal_stats
     near_met, dp0_dbg_si_single_annual_density_near_met, \
         dp0_dbg_si_mask_single_annual_density_near_met, \
         dp0_dbg_si_single_dry_density_near_met, \
@@ -301,7 +371,7 @@ def main_routine():
         dp1_dbi_si_annual_density_near_met, \
         dp1_dbi_si_annual_mask_density_near_met, \
         dp1_dbi_si_dry_density_near_met, \
-        dp1_dbi_si_dry_mask_density_near_met = step4_merge_meteorological_data_agb_zonal_stats.main_routine(biomass_csv,
+        dp1_dbi_si_dry_mask_density_near_met = step5_merge_meteorological_data_agb_zonal_stats.main_routine(biomass_csv,
                                                                                                             met_dir,
                                                                                                             met_zonal_stats,
                                                                                                             dp0_dbg_si_single_annual_density,
@@ -311,39 +381,37 @@ def main_routine():
                                                                                                             dp1_dbi_si_annual_density,
                                                                                                             dp1_dbi_si_annual_mask_density,
                                                                                                             dp1_dbi_si_dry_density,
-                                                                                                            dp1_dbi_si_dry_mask_density
-                                                                                                            )
+                                                                                                            dp1_dbi_si_dry_mask_density)
 
-
-    print("=" * 100)
-    print("=" * 100)
-    print("step4_merge_meteorological_data_agb_zonal_stats - COMPLETE")
-    print("=" * 100)
-    print("=" * 100)
-    # todo working uncomment out
-
+    # print("Finish 1 - line 332 - sr and density met only")
     # import sys
     # sys.exit()
 
-    import step5_merge_meteorological_si
-    seasonal_si_clean, dp0_dbg_si_single_annual_density_near_met_si, \
-        dp0_dbg_si_mask_single_annual_density_near_met_si, \
-        dp0_dbg_si_single_dry_density_near_met_si, \
-        dp0_dbg_si_mask_single_dry_density_near_met_si, \
-        dp1_dbi_si_annual_density_near_met_si, \
-        dp1_dbi_si_annual_mask_density_near_met_si, \
-        dp1_dbi_si_dry_density_near_met_si, \
-        dp1_dbi_si_dry_mask_density_near_met_si = step5_merge_meteorological_si.main_routine(
-        biomass_csv, met_si_dir, met_si,
-        dp0_dbg_si_single_annual_density_near_met,
-        dp0_dbg_si_mask_single_annual_density_near_met,
-        dp0_dbg_si_single_dry_density_near_met,
-        dp0_dbg_si_mask_single_dry_density_near_met,
-        dp1_dbi_si_annual_density_near_met,
-        dp1_dbi_si_annual_mask_density_near_met,
-        dp1_dbi_si_dry_density_near_met,
-        dp1_dbi_si_dry_mask_density_near_met
-    )
+    print("=" * 100)
+    print("=" * 100)
+    print("step5_merge_meteorological_data_agb_zonal_stats - COMPLETE")
+    print("=" * 100)
+    print("=" * 100)
+
+    # import step5_merge_meteorological_si
+    # seasonal_si_clean, dp0_dbg_si_single_annual_density_near_met_si, \
+    #     dp0_dbg_si_mask_single_annual_density_near_met_si, \
+    #     dp0_dbg_si_single_dry_density_near_met_si, \
+    #     dp0_dbg_si_mask_single_dry_density_near_met_si, \
+    #     dp1_dbi_si_annual_density_near_met_si, \
+    #     dp1_dbi_si_annual_mask_density_near_met_si, \
+    #     dp1_dbi_si_dry_density_near_met_si, \
+    #     dp1_dbi_si_dry_mask_density_near_met_si = step5_merge_meteorological_si.main_routine(
+    #     biomass_csv, met_si_dir, met_si,
+    #     dp0_dbg_si_single_annual_density_near_met,
+    #     dp0_dbg_si_mask_single_annual_density_near_met,
+    #     dp0_dbg_si_single_dry_density_near_met,
+    #     dp0_dbg_si_mask_single_dry_density_near_met,
+    #     dp1_dbi_si_annual_density_near_met,
+    #     dp1_dbi_si_annual_mask_density_near_met,
+    #     dp1_dbi_si_dry_density_near_met,
+    #     dp1_dbi_si_dry_mask_density_near_met
+    # )
 
     print("=" * 100)
     print("=" * 100)
@@ -351,16 +419,41 @@ def main_routine():
     print("=" * 100)
     print("=" * 100)
 
-    import step6_merge_tile_seasonal_fire_zonal_stats
-    fire_df, dp0_dbg_si_single_annual_density_near_met_si_fire = step6_merge_tile_seasonal_fire_zonal_stats.main_routine(
-        biomass_df, mosaic_dir, output_dir_path, dp0_dbg_si_single_annual_density_near_met_si,
-        dp0_dbg_si_mask_single_annual_density_near_met_si,
-        dp0_dbg_si_single_dry_density_near_met_si,
-        dp0_dbg_si_mask_single_dry_density_near_met_si,
-        dp1_dbi_si_annual_density_near_met_si,
-        dp1_dbi_si_annual_mask_density_near_met_si,
-        dp1_dbi_si_dry_density_near_met_si,
-        dp1_dbi_si_dry_mask_density_near_met_si)
+    # import sys
+    # sys.exit()
+
+    import step6_merge_fire_data_agb_zonal_stats_from_met
+    fire_df, dp0_dbg_si_single_annual_density_near_met_fire, \
+        dp0_dbg_si_mask_single_annual_density_near_met_fire, \
+        dp0_dbg_si_single_dry_density_near_met_fire, \
+        dp0_dbg_si_mask_single_dry_density_near_met_fire, \
+        dp1_dbi_si_annual_density_near_met_fire, \
+        dp1_dbi_si_annual_mask_density_near_met_fire, \
+        dp1_dbi_si_dry_density_near_met_fire, \
+        dp1_dbi_si_dry_mask_density_near_met_fire = step6_merge_fire_data_agb_zonal_stats_from_met.main_routine(
+        biomass_csv, fire_dir, output_dir_path,
+        dp0_dbg_si_single_annual_density_near_met,
+        dp0_dbg_si_mask_single_annual_density_near_met,
+        dp0_dbg_si_single_dry_density_near_met,
+        dp0_dbg_si_mask_single_dry_density_near_met,
+        dp1_dbi_si_annual_density_near_met,
+        dp1_dbi_si_annual_mask_density_near_met,
+        dp1_dbi_si_dry_density_near_met,
+        dp1_dbi_si_dry_mask_density_near_met)
+
+    import sys
+    sys.exit("step 1 386")
+
+    # import step6_merge_tile_seasonal_fire_zonal_stats
+    # fire_df, dp0_dbg_si_single_annual_density_near_met_si_fire = step6_merge_tile_seasonal_fire_zonal_stats.main_routine(
+    #     biomass_df, mosaic_dir, output_dir_path, dp0_dbg_si_single_annual_density_near_met_si,
+    #     dp0_dbg_si_mask_single_annual_density_near_met,
+    #     dp0_dbg_si_single_dry_density_near_met,
+    #     dp0_dbg_si_mask_single_dry_density_near_met,
+    #     dp1_dbi_si_annual_density_near_met,
+    #     dp1_dbi_si_annual_mask_density_near_met,
+    #     dp1_dbi_si_dry_density_near_met,
+    #     dp1_dbi_si_dry_mask_density_near_met)
 
     print("=" * 100)
     print("=" * 100)
