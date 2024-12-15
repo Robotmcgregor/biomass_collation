@@ -379,6 +379,7 @@ def collect_csv_files_to_df(root_dir):
             # Read each CSV file and append it to the DataFrame list
             for csv_file in csv_files:
                 csv_path = os.path.join(root, csv_file)
+                #print("csv_path: ", csv_path)
                 df = pd.read_csv(csv_path)  # Read the CSV file into a DataFrame
                 dfs.append(df)  # Append DataFrame to the list
 
@@ -446,10 +447,10 @@ def main_routine(biomass_csv, fire_dir,
     dp1_dbi_si_annual_mask_density_near_met,
     dp1_dbi_si_dry_density_near_met,
     dp1_dbi_si_dry_mask_density_near_met)"""
-    biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-
-    fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire"
-    output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
+    # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
+    #
+    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire"
+    # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
     # print("fire_dir: ", fire_dir)
     # import sys
     # sys.exit()
@@ -469,7 +470,7 @@ def main_routine(biomass_csv, fire_dir,
                  "lds_fsm_lfsum": ["lfsm", 0],
                  "lds_fyn_lfysn": ["lfyn", 0],
                  "lds_pos_lposf": ["lpos", 0],
-                 "lds_rio_afrio": ["lrio", 0],
+                 "lds_rio_lfrio": ["lrio", 0],
                  "lds_gap_lavgf": ["lgap", "im_name"],
 
                  "cor": ["corr", 0],
@@ -534,6 +535,10 @@ def main_routine(biomass_csv, fire_dir,
     merged_df_list = []
     for d_type_substr in d_type_substr_list:
         print("d_type_substr: ", d_type_substr)
+        # if d_type_substr == "lds_rio_lfrio":
+        #     print("located: ", "lds_rio_lfrio")
+        #     import sys
+        #     sys.exit("found it!!!")
         # continue
         # Filter and sort combined_df for the current d_type_substr
         temp_df = combined_df[combined_df['d_type_substr'] == d_type_substr].sort_values(by='image_dt')

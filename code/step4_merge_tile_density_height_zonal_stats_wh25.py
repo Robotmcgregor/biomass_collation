@@ -235,7 +235,7 @@ def workflow(dir_):
         sub_sub_list = next(os.walk(sub_list_path))[1]
         # print(sub_sub_list)
         for n in sub_sub_list:
-            # print("n: ", n)
+            print("n: ", n)
             sub_sub_list_path = os.path.join(sub_list_path, n)
             # print(sub_sub_list_path)
 
@@ -344,6 +344,8 @@ def workflow(dir_):
                 else:
                     pass
 
+    # import sys
+    # sys.exit()
     print("fdc columns: ", fdc.columns)
 
     return ccw_list, fdc_list, h99_list, h25_list, hcv_list, hmc_list, hsd_list, n17_list, wdc_list, wfp_list
@@ -654,12 +656,13 @@ def height_file_export(list_, output_dir, output_indv_dir, biomass_df, type_, ma
     dp1 = pd.concat(list_, axis=0)
     print(dp1.shape)
 
+
     dp1.sort_values(by="image_dt", inplace=True)
     print(dp1.columns)
     dp1.to_csv(os.path.join(output_dir, "height_file_export.csv"), index=False)
     print("File output to: ", os.path.join(output_dir, "height_file_export.csv"))
     # import sys
-    # sys.exit()
+    # sys.exit("665")
     dp1.dropna(subset=['b1_{0}_count'.format(type_)], inplace=True)
     #'b1_{0}_min'.format(type_)
     print("dropna shape: ", dp1.shape)
@@ -909,19 +912,23 @@ def height_class_file_export(list_, output_dir, output_indv_dir, biomass_df, typ
     return merge_df_list, merge_df_dropna_list
 
 
-def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask, dp1_dbi_si_dry, dp1_dbi_si_mask_dry, \
+def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask, dp1_dbi_si_dry, dp1_dbi_si_mask_dry,
                  dp1_dbi_si_annual, dp1_dbi_si_mask_annual):
     """biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask, dp1_dbi_si_dry, dp1_dbi_si_mask_dry, \
                  dp1_dbi_si_annual, dp1_dbi_si_mask_annual"""
 
     # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-    # tile_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\density"
-    # output_dir = r"C:\Users\robot\projects\outputs\biomass_collation\ot_collation_tile_data_20240710_1238\ht_dn_zonal_stats"
+    # tile_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\densityTest"
+    # output_dir = r"C:\Users\robot\projects\outputs\scratch"
 
     # print(biomass_csv)
     # print(density_dir)
     # print(ht_dn_zonal_stats)
     # Dictionary identifies the data structure of the reference image
+
+    # print("tile_dir: ", tile_dir)
+    # import sys
+    # sys.exit()
 
     tile_export = os.path.join(output_dir, "tile_concat")
     tile_indv_export = os.path.join(output_dir, "tile_indv_site")
@@ -960,15 +967,27 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     ccw_list, fdc_list, h99_list, h25_list, hcv_list, hmc_list, hsd_list, n17_list, wdc_list, wfp_list = workflow(tile_dir)
 
-    # print("h25_list: ", h25_list)
-    # print(len(h25_list))
+    print("ccw_list length:", len(ccw_list))
+    print("fdc_list length:", len(fdc_list))
+    print("h99_list length:", len(h99_list))
+    print("h25_list length:", len(h25_list))
+    print("hcv_list length:", len(hcv_list))
+    print("hmc_list length:", len(hmc_list))
+    print("hsd_list length:", len(hsd_list))
+    print("n17_list length:", len(n17_list))
+    print("wdc_list length:", len(wdc_list))
+    print("wfp_list length:", len(wfp_list))
+
     # import sys
     # sys.exit("stop: h25_list")
 
     # --------------------------------------- no fire mask ------------------------------------------
 
     if len(ccw_list) > 0:
+        print("ccw_"*100)
         # print(ccw_list)
+        # import sys
+        # sys.exit()
 
         merge_ccw_list, merge_ccw_dropna_list = height_file_export(ccw_list, tile_export, tile_indv_export, biomass_df,
                                                                    "ccw", False)
@@ -1011,6 +1030,17 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         df_drop_ccw_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_drop_ccw_reformat.csv", index=False)
         df_ccw_reformat.sort_values(by="uid", inplace=True)
         df_ccw_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_ccw_reformat.csv", index=False)
+        # Print unique length of site_clean column
+        # unique_site_clean_length = df_ccw_reformat['site_clean'].nunique()
+        # print("Unique site_clean length: ", unique_site_clean_length)
+        # 
+        # # Check if 'AUV07' is in site_clean column
+        # contains_auv07 = 'AUV07' in df_ccw_reformat['site_clean'].values
+        # print("Contains AUV07: ", contains_auv07)
+        # if not contains_auv07:
+        #     print("AUV07 not found in site_clean column. Stopping script.")
+        #     import sys
+        #     sys.exit()
 
 
     else:
@@ -1018,7 +1048,7 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
     if len(fdc_list) > 0:
         print("*" * 100)
-        # print("FDC - list: ", fdc_list)
+        print("FDC - list: ", fdc_list)
         merge_fdc_list, merge_fdc_dropna_list = density_file_export(fdc_list, tile_export, tile_indv_export,
                                                                     biomass_df, "fdc", False)
 
@@ -1053,6 +1083,18 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         df_drop_fdc_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_drop_fdc_reformat.csv", index=False)
         df_fdc_reformat.sort_values(by="uid", inplace=True)
         df_fdc_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_fdc_reformat.csv", index=False)
+        # Print unique length of site_clean column
+        unique_site_clean_length = df_fdc_reformat['site_clean'].nunique()
+        print("Unique site_clean length: ", unique_site_clean_length)
+
+        # Check if 'AUV07' is in site_clean column
+        contains_auv07 = 'AUV07' in df_fdc_reformat['site_clean'].values
+        print("Contains AUV07: ", contains_auv07)
+
+        # if not contains_auv07:
+        #     print("AUV07 not found in site_clean column. Stopping script.")
+        #     import sys
+        #     sys.exit()
 
     else:
         pass
@@ -1327,6 +1369,7 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
 
 
     if len(wdc_list) > 0:
+        print("wdc_"*100)
         merge_wdc_list, merge_wdc_dropna_list = height_class_file_export(wdc_list, tile_export, tile_indv_export,
                                                                          biomass_df, "wdc", False)
 
@@ -1366,12 +1409,25 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         df_wdc_reformat.sort_values(by="uid", inplace=True)
         df_wdc_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_wdc_reformat.csv", index=False)
 
+        unique_site_clean_length = df_wdc_reformat['site_clean'].nunique()
+        print("Unique site_clean length: ", unique_site_clean_length)
+
+        # Check if 'AUV07' is in site_clean column
+        contains_auv07 = 'AUV07' in df_wdc_reformat['site_clean'].values
+        print("Contains AUV07: ", contains_auv07)
+
+        # if not contains_auv07:
+        #     print("AUV07 not found in site_clean column. Stopping script.")
+        #     import sys
+        #     sys.exit()
+
 
     else:
         print("There are no wdc records, goodbye....")
         pass
 
     if len(wfp_list) > 0:
+        print("wfp_"*100)
         merge_wfp_list, merge_wfp_dropna_list = height_file_export(wfp_list, tile_export, tile_indv_export,
                                                                    biomass_df, "wfp", False)
 
@@ -1412,11 +1468,25 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         df_wfp_reformat.sort_values(by="uid", inplace=True)
         df_wfp_reformat.to_csv(r"C:\Users\robot\projects\outputs\scratch\df_wfp_reformat.csv", index=False)
 
+        unique_site_clean_length = df_wfp_reformat['site_clean'].nunique()
+        print("Unique site_clean length: ", unique_site_clean_length)
+
+        # Check if 'AUV07' is in site_clean column
+        contains_auv07 = 'AUV07' in df_wfp_reformat['site_clean'].values
+        print("Contains AUV07: ", contains_auv07)
+
+        # if not contains_auv07:
+        #     print("AUV07 not found in site_clean column. Stopping script.")
+        #     import sys
+        #     sys.exit()
+
     else:
         print("There are no wfp records, goodbye....")
         pass
 
     print("-" * 100)
+    # import sys
+    # sys.exit("wfp error")
 
     # ------------------------------------------ Separate to seasons ----------------------------------------
 
@@ -2315,7 +2385,7 @@ def main_routine(biomass_csv, tile_dir, output_dir, dp0_dbg_si, dp0_dbg_si_mask,
         'b1_h99_min', 'b1_h99_max', 'b1_h99_mean', 'b1_h99_std',
         'b1_h99_med', 'b1_h99_p25', 'b1_h99_p50', 'b1_h99_p75', 'b1_h99_p95', 'b1_h99_p99',
 
-        # ----------------------------------- h99 annual-----------------------------
+        # ----------------------------------- h25 annual-----------------------------
         'b1_h25_min', 'b1_h25_max', 'b1_h25_mean', 'b1_h25_std',
         'b1_h25_med', 'b1_h25_p25', 'b1_h25_p50', 'b1_h25_p75', 'b1_h25_p95', 'b1_h25_p99',
 

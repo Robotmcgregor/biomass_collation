@@ -353,9 +353,9 @@ def main_routine():
 
 
 
-    # print("Finish 1 - line 279 - sr and density only")
-    # import sys
-    # sys.exit()
+    print("Finish 1 - line 279 - sr and density only")
+    import sys
+    sys.exit()
     print("=" * 100)
     print("=" * 100)
     print("step3_merge_tile_density_height_zonal_stats - COMPLETE")
