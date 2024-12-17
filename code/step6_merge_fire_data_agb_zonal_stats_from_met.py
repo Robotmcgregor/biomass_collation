@@ -448,8 +448,8 @@ def main_routine(biomass_csv, fire_dir,
     dp1_dbi_si_dry_density_near_met,
     dp1_dbi_si_dry_mask_density_near_met)"""
     # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-    #
-    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024"
+    # 
+    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_2000_2024"
     # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
     # print("fire_dir: ", fire_dir)
     # import sys
@@ -810,8 +810,8 @@ def main_routine(biomass_csv, fire_dir,
     ml_merged_df.to_csv(r"H:\scratch\nafi_stats\final_biomass_mean_min_max.csv", index=False)
 
 
-    import sys
-    sys.exit("forced stop")
+    # import sys
+    # sys.exit("forced stop")
 
     # # import sys
     # # sys.exit()

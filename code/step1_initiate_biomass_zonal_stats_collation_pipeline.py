@@ -145,15 +145,16 @@ def get_cmd_args_fn():
                    help="Path to the mosaic fire scar zonal stats directory.",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240723_1008",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240801_0927_nafi_only",
-                   #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024",
-                   default=r"C:\Users\robot\projects\outputs\fire_zonal")
+                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_2000_2024",
+                   #default=r"C:\Users\robot\projects\outputs\fire_zonal",
+                   )
 
     p.add_argument('-m', '--met_dir',
                    help="Path to the meteorological data zonal stats directory.",
                    #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean",
                    #default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024",
                    #default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean",
-                   default = r"F:\silo\outputs\test")
+                   default = r"F:\silo\outputs")
 
     # p.add_argument('-ms', '--met_si_dir',
     #                help="Path to the meteorological data zonal stats directory.",
