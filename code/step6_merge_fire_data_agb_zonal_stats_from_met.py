@@ -427,15 +427,17 @@ def missing_values(df1, df2, column_name):
     print("Entries in the second DataFrame missing from the first:")
     print(missing_from_df1 if missing_from_df1 else "None")
 
-def main_routine(biomass_csv, fire_dir,
-                 output_dir, dp0_dbg_si_single_annual_density_near_met,
-    dp0_dbg_si_mask_single_annual_density_near_met,
-    dp0_dbg_si_single_dry_density_near_met,
-    dp0_dbg_si_mask_single_dry_density_near_met,
-    dp1_dbi_si_annual_density_near_met,
-    dp1_dbi_si_annual_mask_density_near_met,
-    dp1_dbi_si_dry_density_near_met,
-    dp1_dbi_si_dry_mask_density_near_met):
+def main_routine():
+
+    # biomass_csv, fire_dir,
+    #              output_dir, dp0_dbg_si_single_annual_density_near_met,
+    # dp0_dbg_si_mask_single_annual_density_near_met,
+    # dp0_dbg_si_single_dry_density_near_met,
+    # dp0_dbg_si_mask_single_dry_density_near_met,
+    # dp1_dbi_si_annual_density_near_met,
+    # dp1_dbi_si_annual_mask_density_near_met,
+    # dp1_dbi_si_dry_density_near_met,
+    # dp1_dbi_si_dry_mask_density_near_met):
 
 
     """    biomass_csv, dir_,
@@ -447,11 +449,11 @@ def main_routine(biomass_csv, fire_dir,
     dp1_dbi_si_annual_mask_density_near_met,
     dp1_dbi_si_dry_density_near_met,
     dp1_dbi_si_dry_mask_density_near_met)"""
-    # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-    #
-    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire"
-    # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
-    # print("fire_dir: ", fire_dir)
+    biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
+
+    fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024"
+    output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
+    print("fire_dir: ", fire_dir)
     # import sys
     # sys.exit()
 
@@ -698,19 +700,23 @@ def main_routine(biomass_csv, fire_dir,
         # sys.exit("line 561")
 
         # Replace the original biomass_df with the newly merged DataFrame
-        biomass_df = merged_df
+        #biomass_df = merged_df
         merged_df_list.append(merged_df)
 
 
-
-    # Merge all DataFrames left to right
-    merged_df_new = reduce(lambda left, right: pd.merge(left, right, on='site_clean', how='outer'), merged_df_list)
-
-    merged_df_new.to_csv(r"H:\scratch\nafi_stats\biomass_merged_new_way.csv", index=False)
-
-    # Display the merged DataFrame
-    print(merged_df_new)
+    merged_df = merge_df_list_fn(merged_df_list)
+    #merged_df.drop(columns=["site_clean"], inplace=True)
+    merged_df.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\fire_biomass_data.csv", index=False)
+    print("merged_df: ", merged_df.shape)
+    # # Merge all DataFrames left to right
+    # merged_df_new = reduce(lambda left, right: pd.merge(left, right, on='site_clean', how='outer'), merged_df_list)
+    #
+    # merged_df_new.to_csv(r"H:\scratch\nafi_stats\biomass_merged_new_way.csv", index=False)
+    #
+    # # Display the merged DataFrame
+    # print(merged_df_new)
     print(biomass_df)
+
 
 
     # Output the final DataFrame
@@ -731,225 +737,96 @@ def main_routine(biomass_csv, fire_dir,
     ]
 
     # Keep only these columns from the DataFrame
-    filtered_df = biomass_df[columns_to_keep]
+    filtered_biomass_df = biomass_df[columns_to_keep]
 
-    # Step 2: Find and keep only columns that contain 'mean', 'min', and 'max'
-    mean_min_max_columns = [col for col in biomass_df.columns if 'mean' in col or 'min' in col or 'max' in col]
+    filtered_biomass_df.to_csv(r"H:\scratch\nafi_stats\biomass_filtered.csv", index=False)
 
-    biomass_df[mean_min_max_columns].to_csv(r"H:\scratch\nafi_stats\biomass_mean_min_max.csv", index=False)
+    # # Step 2: Find and keep only columns that contain 'mean', 'min', and 'max'
+    # mean_min_max_columns = [col for col in biomass_df.columns if 'mean' in col or 'min' in col or 'max' in col]
+
+    # Step 2: Find and keep only columns that contain 'mean', 'min', 'max', or are named 'site_clean'
+    mean_min_max_columns = [col for col in merged_df.columns if
+                            'mean' in col or 'min' in col or 'max' in col or col == 'site_clean']
+
+    # Filter the DataFrame to keep only the desired columns
+    filtered_fire_df = merged_df[mean_min_max_columns]
+
+    filtered_fire_df.to_csv(r"H:\scratch\nafi_stats\biomass_mean_min_max.csv", index=False)
     print("biomass_df shape: ", biomass_df.shape)
 
+
+
+    # required_columns = [
+    #     'uid', 'site', 'site_name', 'date', 'lat_gda94', 'lon_gda94',
+    #     'bio_b_kg1ha', 'bio_br_kg1ha', 'bio_l_kg1ha', 'bio_r_kg1ha',
+    #     'bio_s_kg1ha', 'bio_t_kg1ha', 'bio_w_kg1ha', 'bio_agb_kg1ha',
+    #     'c_agb_kg1ha', 'c_b_kg1ha', 'c_br_kg1ha', 'c_l_kg1ha', 'c_r_kg1ha',
+    #     'c_s_kg1ha', 'c_t_kg1ha', 'c_w_kg1ha', 'geometry', 'basal_dt', 'site_clean'
+    # ]
+    #
+    # # # Dynamically include columns containing 'mean', 'min', or 'max'
+    # # mean_min_max_columns = [col for col in biomass_df.columns if
+    # #                         'mean' in col or 'min' in col or 'max' in col]
+
+    # # Combine explicitly required columns with dynamic mean/min/max columns
+    # final_columns = set(columns_to_keep + mean_min_max_columns)
+    #
+    # # Filter the DataFrame
+    # filtered_biomass_df = biomass_df[final_columns]
+    #
+    # filtered_biomass_df.to_csv(r"H:\scratch\nafi_stats\biomass_mean_min_max_filtered_biomass.csv", index=False)
+    # print("biomass_df shape: ", biomass_df.shape)
+
+    # Merge the two DataFrames on 'site_clean' using an inner join
+    merged_df = pd.merge(filtered_biomass_df, filtered_fire_df, on='site_clean', how='inner')
+
+    # Display the first few rows of the merged DataFrame
+    print(merged_df.head())
+    merged_df.to_csv(r"H:\scratch\nafi_stats\biomass_mean_min_max_merged.csv", index=False)
+    # Check for any potential mismatches
+    missing_sites = set(filtered_biomass_df['site_clean']) - set(filtered_fire_df['site_clean'])
+    if missing_sites:
+        print("Sites in filtered_biomass_df missing in filtered_fire_df:")
+        print(missing_sites)
+    else:
+        print("All sites matched successfully!")
+
     # import sys
     # sys.exit()
-    # Combine both filtered datasets (specific columns + mean/min/max columns)
-    final_df = pd.concat([filtered_df, biomass_df[mean_min_max_columns]], axis=1)
+    # # Combine both filtered datasets (specific columns + mean/min/max columns)
+    # final_df = pd.concat([filtered_df, biomass_df[mean_min_max_columns]], axis=1)
+
+    print("filtered_biomass_df: ", filtered_biomass_df.shape)
+    print("filtered_fire_df: ", list(filtered_fire_df))
+    print("filtered_fire_df: ", filtered_fire_df.shape)
+    print("filtered_fire_df: ", list(filtered_fire_df))
+    
+    # Inner join (default)
+    ml_merged_df = pd.merge(filtered_biomass_df, filtered_fire_df, on='site_clean', how='inner')
 
     # Display the final DataFrame
-    print(final_df.shape)
-
-
+    print(ml_merged_df.shape)
 
     # Print the final result
-    final_df.to_csv(r"H:\scratch\test_biomass_collation.csv", index=False)
-    final_df.to_csv(r"H:\scratch\nafi_stats\final_biomass_mean_min_max.csv", index=False)
+    # final_df.to_csv(r"H:\scratch\test_biomass_collation.csv", index=False)
+    ml_merged_df.to_csv(r"H:\scratch\nafi_stats\final_biomass_mean_min_max.csv", index=False)
 
 
-    # import sys
-    # sys.exit("forced stop")
-    #
-    # sub_list = next(os.walk(dir_))[1]
-    # #print("sub_list: ", sub_list)
-    # for sub_dir in sub_list:
-    #     print("+" * 100)
-    #     print("sub_dir: ", sub_dir)
-    #
-    #     # get value from sub_dir
-    #     # dict_values = qld_dict.get(sub_dir)
-    #     # print("variable: ", dict_values)
-    #
-    #     sub_dir_path = os.path.join(dir_, sub_dir)
-    #     print("sub dir path: ", sub_dir_path)
-    #
-    #     out_ver_list = []
-    #     fire_dict_values_list = []
-    #
-    #     # Iterate through all directories and subdirectories
-    #     for root, dirs, files in os.walk(sub_dir_path):
-    #         #print("dirs", dirs)
-    #         #print("files", files)
-    #         csv_files = [f for f in files if f.endswith('.csv')]
-    #         if csv_files:
-    #             # Sort CSV files to concatenate in alphabetical order
-    #             csv_files.sort()
-    #             dfs = []
-    #             for csv_file in csv_files:
-    #                 csv_path = os.path.join(root, csv_file)
-    #                 df = pd.read_csv(csv_path)
-    #                 dfs.append(df)
-    #
-    #         # Concatenate all dataframes in the current directory
-    #         combined_df = pd.concat(dfs, ignore_index=True)
-    #         #print("combined_df", combined_df)
-    #
-    #         ver_ = combined_df.d_type.unique().tolist()
-    #         print("ver_ whole list", ver_)
-    #         print("ver_: ", ver_[0][8:])
-    #         fire_dict_values = fire_dict.get(ver_[0][8:])
-    #         if fire_dict_values:
-    #             print("match variable: ", fire_dict_values[0])
-    #             print("variable: ", fire_dict_values[0])
-    #
-    #             out_ver_list.append(ver_[0][8:])
-    #             fire_dict_values_list.append(fire_dict_values)
-    #
-    #             out_ver = f"f_{fire_dict_values[0]}"
-    #             combined_df.rename(columns={"im_name": f"im_{out_ver}",
-    #                                         "mean": f"mean_{out_ver}",
-    #                                         "maximum": f"max_{out_ver}",
-    #                                         "minimum": f"min_{out_ver}",
-    #                                         }, inplace=True)
-    #
-    #             combined_df = convert_to_datetime(combined_df, "im_date", "image_dt")
-    #             combined_df[f"dt_{out_ver}"] = combined_df["im_date"]
-    #             combined_df.sort_values(by='image_dt', inplace=True)
-    #
-    #             # correct df site name
-    #             site_list = []
-    #             site_name = combined_df["site"].tolist()
-    #             for i in site_name:
-    #                 # print("i: ", i)
-    #                 n = i.replace("_1ha", "")
-    #                 # print(n)
-    #                 site_list.append(n)
-    #
-    #             combined_df["site_clean"] = site_list
-    #             combined_df['site_clean'] = combined_df['site_clean'].str.upper()
-    #             # print("biomass info: ", biomass_df.info())
-    #             biomass_df.sort_values(by="basal_dt", inplace=True)
-    #             # print("biomass_df: ", biomass_df.shape)
-    #             # print("biomass_df: ", biomass_df["basal_dt"])
-    #             # biomass_df.to_csv(
-    #             #     r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal\{0}_biomass.csv".format(f_type),
-    #             #     index=False)
-    #             combined_df.sort_values(by="image_dt", inplace=True)
-    #             # print("combined_df: ", combined_df.shape)
-    #             outcsv = r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal\{0}_combined_df.csv".format(
-    #                 out_ver)
-    #             print("outcsv: ", outcsv)
-    #
-    #             # import sys
-    #             # sys.exit()
-    #             combined_df.to_csv(outcsv,
-    #                                index=False)
-    #             #print("combined_df: ", combined_df.info())
-    #
-    #             # import sys
-    #             # sys.exit()
-    #             combined_df.to_csv(r"H:\scratch\combined{0}.csv".format(
-    #                 out_ver), index=False)
-    #             # merge data with basal dataset based on the nearest date to the field data collection
-    #             n_df = pd.merge_asof(biomass_df, combined_df, left_on="basal_dt", right_on="image_dt", by="site_clean",
-    #                                  direction="backward",
-    #                                  #direction="nearest",
-    #                                  )
-    #
-    #             # Check for matching 'site_clean' values (rows where the merge was successful)
-    #             matched = n_df[n_df['image_dt'].notnull()]
-    #
-    #             # Check for unmatched 'site_clean' values (rows where the merge failed, i.e., image_dt is NaN)
-    #             unmatched = n_df[n_df['image_dt'].isnull()]
-    #
-    #             # Display the matched and unmatched results
-    #             print("Matched site_clean values:")
-    #             print(matched[['site_clean', 'basal_dt', 'image_dt']])
-    #
-    #             print("\nUnmatched site_clean values:")
-    #             print(unmatched[['site_clean', 'basal_dt']])
-    #
-    #             # drop columns for data checking
-    #             print("n_df.columns: ", n_df.columns)
-    #             # List of feature names to drop
-    #             features_to_drop = ["site_x", 'ident', 'site_y', 'im_date',
-    #                                 'd_type', 'image_dt']
-    #
-    #             # Drop the features
-    #             n_df.drop(columns=features_to_drop, inplace=True)
-    #             #print("n_df.columns: ", n_df.columns)
-    #
-    #             n_df = dropnull_lat_3(n_df)
-    #
-    #             if not n_df.empty:
-    #                 print("n_df.shape: ", n_df.shape)
-    #                 near_df_list.append(n_df)
-    #
-    #                 # drop columns for ml concat
-    #
-    #                 # List of feature names to drop
-    #                 features_to_drop = [f"dt_{out_ver}", f"im_{out_ver}"]
-    #
-    #                 # Drop the features
-    #                 n_df.drop(columns=features_to_drop, inplace=True)
-    #                 #print("n_df.columns: ", n_df.columns)
-    #                 ml_near_df_list.append(n_df)
-    #
-    #                 # create temp dirs
-    #                 n_temp_dir_ = temp_dir_fn(output_dir, "near")
-    #                 # create temp dirs
-    #                 n_temp_dir = temp_dir_fn(n_temp_dir_, sub_dir)
-    #                 # export csv
-    #                 out_file_fn(n_temp_dir, "near", sub_dir, n_df, out_ver)
-    #                 print("n_df columns to list: ", n_df.columns.tolist())
-    #             else:
-    #                 print(f"Key '{ver_[0][8:]}' not found in fire_dict.")
-    #
-    #         else:
-    #             print("no files....")
-    #
-    # # print(set(out_ver_list))
-    # # # Convert inner lists to tuples
-    # # fire_dict_values_set = set(tuple(x) for x in fire_dict_values_list)
-    #
-    # # print(fire_dict_values_set)
-    # # print("near_df_list: ", near_df_list)
-    #
+    import sys
+    sys.exit("forced stop")
+
     # # import sys
     # # sys.exit()
-    # # mg_df = fire_merge(near_df_list)
-    # #
-    # # mg_df = groupby_site_name(mg_df)
-    # # print("mg_df: ", mg_df.shape)
-    # # mg_df.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\mg_test.csv", index=False)
-    # import sys
-    # sys.exit()
-    # ml_merged_df = merge_biomass(biomass_df, mg_df)
-    #
-    # # Rename columns to remove the '_x' suffix
-    # ml_merged_df.rename(columns={'basal_dt_x': 'basal_dt', 'site_clean_x': 'site_clean'}, inplace=True)
-    #
-    # print("merged_df: ", ml_merged_df.shape)
-    # ml_merged_df.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\merged_df_test2.csv", index=False)
-    # print("ml_merged_df: ", list(ml_merged_df))
-    # # import sys
-    # # sys.exit("line 642")
-    # merged_df = merge_df_list_fn(near_df_list)
-    # #merged_df.drop(columns=["site_clean"], inplace=True)
-    # merged_df.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\near_test.csv", index=False)
-    # # import sys
-    # # sys.exit()
-    ml_merged_df = final_df
-    # #ml_merged_df.drop(columns=["site_clean"], inplace=True)
-    # ml_merged_df.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\ml_near_test.csv", index=False)
-    # print("merged_df: ", merged_df.columns.tolist())
-    # print("ml_merged_df: ", ml_merged_df.columns.tolist())
+    #ml_merged_df = final_df
     # import sys
     # sys.exit()
 
-    n_df1 = final_df
-    print(list(n_df1.columns))
+    # n_df1 = final_df
+    # print(list(n_df1.columns))
 
-    out = os.path.join(r"C:\Users\robot\projects\biomass\collated_zonal_stats\fire", "near_met.csv")
-
-    n_df1.to_csv(out, index=False)
+    # out = os.path.join(r"C:\Users\robot\projects\biomass\collated_zonal_stats\fire", "near_met.csv")
+    #
+    # n_df1.to_csv(out, index=False)
 
     # out = os.path.join(r"C:\Users\robot\projects\biomass\collated_zonal_stats\fire",
     #                    "dp0_dbg_si_single_annual_density.csv")
@@ -966,6 +843,9 @@ def main_routine(biomass_csv, fire_dir,
     # # ---------------------------------------------------- n_df --------------------------------------------------------
     #
     # --------------------------------------------- annual merge -------------------------------------------------------
+
+    # dp0_dbg_si_single_annual_density_near_met = pd.read_csv(
+    #     r"C:\Users\robot\projects\biomass\collated_zonal_stats\single\dp0_dbg_si_single_annual_density_near_met.csv")
     print("ml_merged_df: ", list(ml_merged_df))
     print("dp0_dbg_si_single_annual_density_near_met: ", list(dp0_dbg_si_single_annual_density_near_met))
     
@@ -987,9 +867,12 @@ def main_routine(biomass_csv, fire_dir,
                                                              'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'
                                                              ])
 
-    # List of columns (features) to drop
-    columns_to_drop = ['site_name_x', 'geometry', 'basal_dt', 'site_clean', 'site_name_y',
-       'wfp_dt', 'wfp_dir', 'wfp_seas', 'ccw_dt', 'ccw_dir', 'ccw_seas']
+    # # List of columns (features) to drop
+    # columns_to_drop = ['site_name_x', 'geometry', 'basal_dt', 'site_clean', 'site_name_y',
+    #    'wfp_dt', 'wfp_dir', 'wfp_seas', 'ccw_dt', 'ccw_dir', 'ccw_seas']
+
+    import sys
+    sys.exit("step 6 831")
 
     # Drop the specified columns
     dp0_dbg_si_single_annual_density_near_met_fire_dropped = dp0_dbg_si_single_annual_density_near_met_fire.drop(columns=columns_to_drop)
