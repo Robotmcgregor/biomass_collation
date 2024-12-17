@@ -315,17 +315,16 @@ def drop_cols_fn(df):
     return df_out
 
 
-def main_routine():
-    # biomass_csv, dir_,
-    #              output_dir,
-    #              dp0_dbg_si_single_annual_density,
-    #              dp0_dbg_si_mask_single_annual_density,
-    #              dp0_dbg_si_single_dry_density,
-    #              dp0_dbg_si_mask_single_dry_density,
-    #              dp1_dbi_si_annual_density,
-    #              dp1_dbi_si_annual_mask_density,
-    #              dp1_dbi_si_dry_density,
-    #              dp1_dbi_si_dry_mask_density):
+def main_routine(biomass_csv, dir_,
+                 output_dir,
+                 dp0_dbg_si_single_annual_density,
+                 dp0_dbg_si_mask_single_annual_density,
+                 dp0_dbg_si_single_dry_density,
+                 dp0_dbg_si_mask_single_dry_density,
+                 dp1_dbi_si_annual_density,
+                 dp1_dbi_si_annual_mask_density,
+                 dp1_dbi_si_dry_density,
+                 dp1_dbi_si_dry_mask_density):
 
 
     
@@ -339,14 +338,15 @@ def main_routine():
                  dp1_dbi_si_annual_mask_density,
                  dp1_dbi_si_dry_density,
                  dp1_dbi_si_dry_mask_density"""
-    biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-    # #
-    dir_ = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024"
-    output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal"
-
-    print("manual biomass: ", r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv")
-
-    print("manual dir_: ", r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean")
+    # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
+    # # #
+    # dir_ = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024"
+    # dir_ = r"F:\silo\outputs\test"
+    # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal"
+    #
+    # print("manual biomass: ", r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv")
+    #
+    # print("manual dir_: ", r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean")
     #
     # print("manual output_dir: ", r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal")
     # dp0_dbg_si_single_annual_density,)
@@ -431,75 +431,154 @@ def main_routine():
 
     file_dict = {
         # DLYRN (Rainfall)
-        "dlyrn_ann_mavg": ["aavg"],
-        "dlyrn_ann_mmed": ["amed"],
-        "dlyrn_ann_msum": ["asum"],
-        "dlyrn_ann_msin_sasi": ["asum"],
+        "dlyrn_ann_mavg": ["aavg"], # Total seasonal average monthly rainfall
+        "dlyrn_ann_mmed": ["amed"], # Total seasonal median monthly rainfall
+        "dlyrn_ann_msum": ["asum"], # Total seasonal rainfall
+        "dlyrn_ann_mmma": ["amma"],  # Total seasonal average monthly rainfall
+        "dlyrn_ann_mmmd": ["ammd"],  # Total seasonal median monthly rainfall
+        "dlyrn_ann_msin_ssii": ["asii"],  # Seasonal index
+
         "dlyrn_dry_mavg": ["davg"],
         "dlyrn_dry_mmed": ["dmed"],
         "dlyrn_dry_msum": ["dsum"],
-        "dlyrn_dry_msin_sasi": ["dsum"],
+        "dlyrn_dry_mmma": ["dmma"],  # Total seasonal average monthly rainfall
+        "dlyrn_dry_mmmd": ["dmmd"],  # Total seasonal median monthly rainfall
+        "dlyrn_dry_msin_ssii": ["dsii"],
         "dlyrn_mth_mavg": ["mavg"],
         "dlyrn_mth_mmed": ["mmed"],
         "dlyrn_mth_msum": ["msum"],
         "dlyrn_wet_mavg": ["wavg"],
         "dlyrn_wet_mmed": ["wmed"],
         "dlyrn_wet_msum": ["wsum"],
-        "dlyrn_wet_msin_sasi": ["wsum"],
+        "dlyrn_wet_mmma": ["wmma"],  # Total seasonal average monthly rainfall
+        "dlyrn_wet_mmmd": ["wmmd"],  # Total seasonal median monthly rainfall
+        "dlyrn_wet_msin_ssii": ["wsii"],
 
-        # MORAT (Morton's ET)
-        "morat_ann_mavg": ["aavg"],
-        "morat_ann_mmed": ["amed"],
-        "morat_ann_msum": ["asum"],
-        "morat_ann_msin_sasi": ["assi"],
+        # morat (Morton's ET)
+        "morat_ann_mavg": ["aavg"],  # Total seasonal average monthly Mortons ET
+        "morat_ann_mmed": ["amed"],  # Total seasonal median monthly Mortons ET
+        "morat_ann_msum": ["asum"],  # Total seasonal Mortons ET
+        "morat_ann_mmma": ["amma"],  # Total seasonal average monthly Mortons ET
+        "morat_ann_mmmd": ["ammd"],  # Total seasonal median monthly Mortons ET
+        "morat_ann_msin_ssii": ["asii"],  # Seasonal index
+
         "morat_dry_mavg": ["davg"],
         "morat_dry_mmed": ["dmed"],
         "morat_dry_msum": ["dsum"],
-        "morat_dry_msin_sasi": ["dssi"],
+        "morat_dry_mmma": ["dmma"],  # Total seasonal average monthly Mortons ET
+        "morat_dry_mmmd": ["dmmd"],  # Total seasonal median monthly Mortons ET
+        "morat_dry_msin_ssii": ["dsii"],
         "morat_mth_mavg": ["mavg"],
-        "morat_mth_mmed": ["ammed"],
+        "morat_mth_mmed": ["mmed"],
         "morat_mth_msum": ["msum"],
         "morat_wet_mavg": ["wavg"],
         "morat_wet_mmed": ["wmed"],
         "morat_wet_msum": ["wsum"],
-        "morat_wet_msin_sasi": ["wssi"],
+        "morat_wet_mmma": ["wmma"],  # Total seasonal average monthly Mortons ET
+        "morat_wet_mmmd": ["wmmd"],  # Total seasonal median monthly Mortons ET
+        "morat_wet_msin_ssii": ["wsii"],
 
-        # TPMAX (Maximum Temperature)
-        "tpmax_ann_mavg": ["aavg"],
-        "tpmax_ann_mmed": ["amed"],
-        "tpmax_ann_msum": ["asum"],
-        "tpmax_ann_msin_sasi": ["asum"],
+        # # MORAT (Morton's ET)
+        # "morat_ann_mavg": ["aavg"],
+        # "morat_ann_mmed": ["amed"],
+        # "morat_ann_msum": ["asum"],
+        # "morat_ann_msin_sasi": ["assi"],
+        # "morat_dry_mavg": ["davg"],
+        # "morat_dry_mmed": ["dmed"],
+        # "morat_dry_msum": ["dsum"],
+        # "morat_dry_msin_sasi": ["dssi"],
+        # "morat_mth_mavg": ["mavg"],
+        # "morat_mth_mmed": ["ammed"],
+        # "morat_mth_msum": ["msum"],
+        # "morat_wet_mavg": ["wavg"],
+        # "morat_wet_mmed": ["wmed"],
+        # "morat_wet_msum": ["wsum"],
+        # "morat_wet_msin_sasi": ["wssi"],
+
+        # tpmax (max temp)
+        "tpmax_ann_mavg": ["aavg"],  # Total seasonal average monthly max temp
+        "tpmax_ann_mmed": ["amed"],  # Total seasonal median monthly max temp
+        "tpmax_ann_msum": ["asum"],  # Total seasonal max temp
+        "tpmax_ann_mmma": ["amma"],  # Total seasonal average monthly max temp
+        "tpmax_ann_mmmd": ["ammd"],  # Total seasonal median monthly max temp
+        "tpmax_ann_msin_ssii": ["asii"],  # Seasonal index
+
         "tpmax_dry_mavg": ["davg"],
         "tpmax_dry_mmed": ["dmed"],
         "tpmax_dry_msum": ["dsum"],
-        "tpmax_dry_msin_sasi": ["dssi"],
+        "tpmax_dry_mmma": ["dmma"],  # Total seasonal average monthly max temp
+        "tpmax_dry_mmmd": ["dmmd"],  # Total seasonal median monthly max temp
+        "tpmax_dry_msin_ssii": ["dsii"],
         "tpmax_mth_mavg": ["mavg"],
-        "tpmax_mth_mmed": ["ammed"],
+        "tpmax_mth_mmed": ["mmed"],
         "tpmax_mth_msum": ["msum"],
         "tpmax_wet_mavg": ["wavg"],
         "tpmax_wet_mmed": ["wmed"],
         "tpmax_wet_msum": ["wsum"],
-        "tpmax_wet_msin_sasi": ["wssi"],
+        "tpmax_wet_mmma": ["wmma"],  # Total seasonal average monthly max temp
+        "tpmax_wet_mmmd": ["wmmd"],  # Total seasonal median monthly max temp
+        "tpmax_wet_msin_ssii": ["wsii"],
 
-        # RHMAX (Relative Humidity)
-        "rhmax_ann_mavg": ["aavg"],
-        "rhmax_ann_mmed": ["amed"],
-        "rhmax_ann_msum": ["asum"],
-        "rhmax_ann_msin_sasi": ["assi"],
+        # # TPMAX (Maximum Temperature)
+        # "tpmax_ann_mavg": ["aavg"],
+        # "tpmax_ann_mmed": ["amed"],
+        # "tpmax_ann_msum": ["asum"],
+        # "tpmax_ann_msin_sasi": ["asum"],
+        # "tpmax_dry_mavg": ["davg"],
+        # "tpmax_dry_mmed": ["dmed"],
+        # "tpmax_dry_msum": ["dsum"],
+        # "tpmax_dry_msin_sasi": ["dssi"],
+        # "tpmax_mth_mavg": ["mavg"],
+        # "tpmax_mth_mmed": ["ammed"],
+        # "tpmax_mth_msum": ["msum"],
+        # "tpmax_wet_mavg": ["wavg"],
+        # "tpmax_wet_mmed": ["wmed"],
+        # "tpmax_wet_msum": ["wsum"],
+        # "tpmax_wet_msin_sasi": ["wssi"],
+
+        # rhmax (Relative humidity)
+        "rhmax_ann_mavg": ["aavg"],  # Total seasonal average monthly
+        "rhmax_ann_mmed": ["amed"],  # Total seasonal median monthly
+        "rhmax_ann_msum": ["asum"],  # Total seasonal
+        "rhmax_ann_mmma": ["amma"],  # Total seasonal average monthly
+        "rhmax_ann_mmmd": ["ammd"],  # Total seasonal median monthly
+        "rhmax_ann_msin_ssii": ["asii"],  # Seasonal index
+
         "rhmax_dry_mavg": ["davg"],
         "rhmax_dry_mmed": ["dmed"],
         "rhmax_dry_msum": ["dsum"],
-        "rhmax_dry_msin_sasi": ["dssi"],
+        "rhmax_dry_mmma": ["dmma"],  # Total seasonal average monthly
+        "rhmax_dry_mmmd": ["dmmd"],  # Total seasonal median monthly
+        "rhmax_dry_msin_ssii": ["dsii"],
         "rhmax_mth_mavg": ["mavg"],
         "rhmax_mth_mmed": ["mmed"],
         "rhmax_mth_msum": ["msum"],
         "rhmax_wet_mavg": ["wavg"],
         "rhmax_wet_mmed": ["wmed"],
         "rhmax_wet_msum": ["wsum"],
-        "rhmax_wet_msin_sasi": ["wssi"],
+        "rhmax_wet_mmma": ["wmma"],  # Total seasonal average monthly
+        "rhmax_wet_mmmd": ["wmmd"],  # Total seasonal median monthly
+        "rhmax_wet_msin_ssii": ["wsii"],
+
+        # # RHMAX (Relative Humidity)
+        # "rhmax_ann_mavg": ["aavg"],
+        # "rhmax_ann_mmed": ["amed"],
+        # "rhmax_ann_msum": ["asum"],
+        # "rhmax_ann_msin_sasi": ["assi"],
+        # "rhmax_dry_mavg": ["davg"],
+        # "rhmax_dry_mmed": ["dmed"],
+        # "rhmax_dry_msum": ["dsum"],
+        # "rhmax_dry_msin_sasi": ["dssi"],
+        # "rhmax_mth_mavg": ["mavg"],
+        # "rhmax_mth_mmed": ["mmed"],
+        # "rhmax_mth_msum": ["msum"],
+        # "rhmax_wet_mavg": ["wavg"],
+        # "rhmax_wet_mmed": ["wmed"],
+        # "rhmax_wet_msum": ["wsum"],
+        # "rhmax_wet_msin_sasi": ["wssi"],
     }
 
-    test = "dlyrn_ann_mavg"
+
     biomass_df = pd.read_csv(biomass_csv)
 
     biomass_df = convert_to_datetime(biomass_df, "date", "basal_dt")
@@ -645,8 +724,8 @@ def main_routine():
     ml_merged_df = merge_df_list_fn(ml_near_df_list)
     #ml_merged_df.drop(columns=["site_clean"], inplace=True)
     ml_merged_df.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\final_silo_biomass_data.csv", index=False)
-    import sys
-    sys.exit()
+    # import sys
+    # sys.exit()
 
     #
     # print(list(n_df1.columns))

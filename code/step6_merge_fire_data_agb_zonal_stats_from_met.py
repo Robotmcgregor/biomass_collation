@@ -427,17 +427,15 @@ def missing_values(df1, df2, column_name):
     print("Entries in the second DataFrame missing from the first:")
     print(missing_from_df1 if missing_from_df1 else "None")
 
-def main_routine():
-
-    # biomass_csv, fire_dir,
-    #              output_dir, dp0_dbg_si_single_annual_density_near_met,
-    # dp0_dbg_si_mask_single_annual_density_near_met,
-    # dp0_dbg_si_single_dry_density_near_met,
-    # dp0_dbg_si_mask_single_dry_density_near_met,
-    # dp1_dbi_si_annual_density_near_met,
-    # dp1_dbi_si_annual_mask_density_near_met,
-    # dp1_dbi_si_dry_density_near_met,
-    # dp1_dbi_si_dry_mask_density_near_met):
+def main_routine(biomass_csv, fire_dir,
+                 output_dir, dp0_dbg_si_single_annual_density_near_met,
+    dp0_dbg_si_mask_single_annual_density_near_met,
+    dp0_dbg_si_single_dry_density_near_met,
+    dp0_dbg_si_mask_single_dry_density_near_met,
+    dp1_dbi_si_annual_density_near_met,
+    dp1_dbi_si_annual_mask_density_near_met,
+    dp1_dbi_si_dry_density_near_met,
+    dp1_dbi_si_dry_mask_density_near_met):
 
 
     """    biomass_csv, dir_,
@@ -449,11 +447,11 @@ def main_routine():
     dp1_dbi_si_annual_mask_density_near_met,
     dp1_dbi_si_dry_density_near_met,
     dp1_dbi_si_dry_mask_density_near_met)"""
-    biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-
-    fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024"
-    output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
-    print("fire_dir: ", fire_dir)
+    # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
+    #
+    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024"
+    # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
+    # print("fire_dir: ", fire_dir)
     # import sys
     # sys.exit()
 

@@ -145,13 +145,15 @@ def get_cmd_args_fn():
                    help="Path to the mosaic fire scar zonal stats directory.",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240723_1008",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240801_0927_nafi_only",
-                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024")
+                   #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_200_2024",
+                   default=r"C:\Users\robot\projects\outputs\fire_zonal")
 
     p.add_argument('-m', '--met_dir',
                    help="Path to the meteorological data zonal stats directory.",
                    #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean",
                    #default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024",
-                   default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean")
+                   #default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean",
+                   default = r"F:\silo\outputs\test")
 
     # p.add_argument('-ms', '--met_si_dir',
     #                help="Path to the meteorological data zonal stats directory.",
@@ -442,8 +444,8 @@ def main_routine():
     print("=" * 100)
     print("=" * 100)
 
-    import sys
-    sys.exit("line - 445")
+    # import sys
+    # sys.exit("line - 445")
 
     import step6_merge_fire_data_agb_zonal_stats_from_met
     fire_df, dp0_dbg_si_single_annual_density_near_met_fire, \
