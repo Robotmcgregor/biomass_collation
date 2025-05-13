@@ -338,11 +338,12 @@ def main_routine(biomass_csv, dir_,
                  dp1_dbi_si_annual_mask_density,
                  dp1_dbi_si_dry_density,
                  dp1_dbi_si_dry_mask_density"""
-    # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
-    # # #
-    # dir_ = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024"
-    # dir_ = r"F:\silo\outputs\test"
-    # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal"
+    #biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20241221\slats_tern_biomass.csv"
+    # #
+    #dir_ = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024"
+    #dir_ = r"F:\silo\outputs\met_clean"
+    # F:\silo\outputs\met_clean
+    #output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal"
     #
     # print("manual biomass: ", r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv")
     #
@@ -436,14 +437,14 @@ def main_routine(biomass_csv, dir_,
         "dlyrn_ann_msum": ["asum"], # Total seasonal rainfall
         "dlyrn_ann_mmma": ["amma"],  # Total seasonal average monthly rainfall
         "dlyrn_ann_mmmd": ["ammd"],  # Total seasonal median monthly rainfall
-        "dlyrn_ann_msin_ssii": ["asii"],  # Seasonal index
+        "dlyrn_ann_msin_sasi": ["asii"],  # Seasonal index
 
         "dlyrn_dry_mavg": ["davg"],
         "dlyrn_dry_mmed": ["dmed"],
         "dlyrn_dry_msum": ["dsum"],
         "dlyrn_dry_mmma": ["dmma"],  # Total seasonal average monthly rainfall
         "dlyrn_dry_mmmd": ["dmmd"],  # Total seasonal median monthly rainfall
-        "dlyrn_dry_msin_ssii": ["dsii"],
+        "dlyrn_dry_msin_sasi": ["dsii"],
         "dlyrn_mth_mavg": ["mavg"],
         "dlyrn_mth_mmed": ["mmed"],
         "dlyrn_mth_msum": ["msum"],
@@ -452,7 +453,7 @@ def main_routine(biomass_csv, dir_,
         "dlyrn_wet_msum": ["wsum"],
         "dlyrn_wet_mmma": ["wmma"],  # Total seasonal average monthly rainfall
         "dlyrn_wet_mmmd": ["wmmd"],  # Total seasonal median monthly rainfall
-        "dlyrn_wet_msin_ssii": ["wsii"],
+        "dlyrn_wet_msin_sasi": ["wsii"],
 
         # morat (Morton's ET)
         "morat_ann_mavg": ["aavg"],  # Total seasonal average monthly Mortons ET
@@ -460,14 +461,14 @@ def main_routine(biomass_csv, dir_,
         "morat_ann_msum": ["asum"],  # Total seasonal Mortons ET
         "morat_ann_mmma": ["amma"],  # Total seasonal average monthly Mortons ET
         "morat_ann_mmmd": ["ammd"],  # Total seasonal median monthly Mortons ET
-        "morat_ann_msin_ssii": ["asii"],  # Seasonal index
+        "morat_ann_msin_sasi": ["asii"],  # Seasonal index
 
         "morat_dry_mavg": ["davg"],
         "morat_dry_mmed": ["dmed"],
         "morat_dry_msum": ["dsum"],
         "morat_dry_mmma": ["dmma"],  # Total seasonal average monthly Mortons ET
         "morat_dry_mmmd": ["dmmd"],  # Total seasonal median monthly Mortons ET
-        "morat_dry_msin_ssii": ["dsii"],
+        "morat_dry_msin_sasi": ["dsii"],
         "morat_mth_mavg": ["mavg"],
         "morat_mth_mmed": ["mmed"],
         "morat_mth_msum": ["msum"],
@@ -476,7 +477,7 @@ def main_routine(biomass_csv, dir_,
         "morat_wet_msum": ["wsum"],
         "morat_wet_mmma": ["wmma"],  # Total seasonal average monthly Mortons ET
         "morat_wet_mmmd": ["wmmd"],  # Total seasonal median monthly Mortons ET
-        "morat_wet_msin_ssii": ["wsii"],
+        "morat_wet_msin_sasi": ["wsii"],
 
         # # MORAT (Morton's ET)
         # "morat_ann_mavg": ["aavg"],
@@ -501,14 +502,14 @@ def main_routine(biomass_csv, dir_,
         "tpmax_ann_msum": ["asum"],  # Total seasonal max temp
         "tpmax_ann_mmma": ["amma"],  # Total seasonal average monthly max temp
         "tpmax_ann_mmmd": ["ammd"],  # Total seasonal median monthly max temp
-        "tpmax_ann_msin_ssii": ["asii"],  # Seasonal index
+        "tpmax_ann_msin_sasi": ["asii"],  # Seasonal index
 
         "tpmax_dry_mavg": ["davg"],
         "tpmax_dry_mmed": ["dmed"],
         "tpmax_dry_msum": ["dsum"],
         "tpmax_dry_mmma": ["dmma"],  # Total seasonal average monthly max temp
         "tpmax_dry_mmmd": ["dmmd"],  # Total seasonal median monthly max temp
-        "tpmax_dry_msin_ssii": ["dsii"],
+        "tpmax_dry_msin_sasi": ["dsii"],
         "tpmax_mth_mavg": ["mavg"],
         "tpmax_mth_mmed": ["mmed"],
         "tpmax_mth_msum": ["msum"],
@@ -517,7 +518,7 @@ def main_routine(biomass_csv, dir_,
         "tpmax_wet_msum": ["wsum"],
         "tpmax_wet_mmma": ["wmma"],  # Total seasonal average monthly max temp
         "tpmax_wet_mmmd": ["wmmd"],  # Total seasonal median monthly max temp
-        "tpmax_wet_msin_ssii": ["wsii"],
+        "tpmax_wet_msin_sasi": ["wsii"],
 
         # # TPMAX (Maximum Temperature)
         # "tpmax_ann_mavg": ["aavg"],
@@ -542,14 +543,14 @@ def main_routine(biomass_csv, dir_,
         "rhmax_ann_msum": ["asum"],  # Total seasonal
         "rhmax_ann_mmma": ["amma"],  # Total seasonal average monthly
         "rhmax_ann_mmmd": ["ammd"],  # Total seasonal median monthly
-        "rhmax_ann_msin_ssii": ["asii"],  # Seasonal index
+        "rhmax_ann_msin_sasi": ["asii"],  # Seasonal index
 
         "rhmax_dry_mavg": ["davg"],
         "rhmax_dry_mmed": ["dmed"],
         "rhmax_dry_msum": ["dsum"],
         "rhmax_dry_mmma": ["dmma"],  # Total seasonal average monthly
         "rhmax_dry_mmmd": ["dmmd"],  # Total seasonal median monthly
-        "rhmax_dry_msin_ssii": ["dsii"],
+        "rhmax_dry_msin_sasi": ["dsii"],
         "rhmax_mth_mavg": ["mavg"],
         "rhmax_mth_mmed": ["mmed"],
         "rhmax_mth_msum": ["msum"],
@@ -558,7 +559,7 @@ def main_routine(biomass_csv, dir_,
         "rhmax_wet_msum": ["wsum"],
         "rhmax_wet_mmma": ["wmma"],  # Total seasonal average monthly
         "rhmax_wet_mmmd": ["wmmd"],  # Total seasonal median monthly
-        "rhmax_wet_msin_ssii": ["wsii"],
+        "rhmax_wet_msin_sasi": ["wsii"],
 
         # # RHMAX (Relative Humidity)
         # "rhmax_ann_mavg": ["aavg"],
@@ -686,6 +687,7 @@ def main_routine(biomass_csv, dir_,
                 # merge data with basal dataset based on the nearest date to the field data colection
                 n_df = pd.merge_asof(biomass_df, combined_df, left_on="basal_dt", right_on="image_dt", by="site_clean",
                                      direction="nearest")
+
 
                 # drop columns for data checking
                 #print("n_df.columns: ", n_df.columns)

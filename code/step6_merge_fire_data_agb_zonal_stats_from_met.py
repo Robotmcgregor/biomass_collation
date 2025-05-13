@@ -427,7 +427,8 @@ def missing_values(df1, df2, column_name):
     print("Entries in the second DataFrame missing from the first:")
     print(missing_from_df1 if missing_from_df1 else "None")
 
-def main_routine(biomass_csv, fire_dir,
+def main_routine(
+    biomass_csv, fire_dir,
                  output_dir, dp0_dbg_si_single_annual_density_near_met,
     dp0_dbg_si_mask_single_annual_density_near_met,
     dp0_dbg_si_single_dry_density_near_met,
@@ -449,7 +450,7 @@ def main_routine(biomass_csv, fire_dir,
     dp1_dbi_si_dry_mask_density_near_met)"""
     # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
     # 
-    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_2000_2024"
+    # fire_dir = r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_2000_2024_new"
     # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\fire_zonal"
     # print("fire_dir: ", fire_dir)
     # import sys
@@ -865,12 +866,12 @@ def main_routine(biomass_csv, fire_dir,
                                                              'c_r_kg1ha', 'c_agb_kg1ha', 'basal_dt'
                                                              ])
 
-    # # List of columns (features) to drop
-    # columns_to_drop = ['site_name_x', 'geometry', 'basal_dt', 'site_clean', 'site_name_y',
-    #    'wfp_dt', 'wfp_dir', 'wfp_seas', 'ccw_dt', 'ccw_dir', 'ccw_seas']
+    # List of columns (features) to drop
+    columns_to_drop = ['site_name_x', 'geometry', 'basal_dt', 'site_clean', 'site_name_y',
+       'wfp_dt', 'wfp_dir', 'wfp_seas', 'ccw_dt', 'ccw_dir', 'ccw_seas']
 
-    import sys
-    sys.exit("step 6 831")
+    # import sys
+    # sys.exit("step 6 831")
 
     # Drop the specified columns
     dp0_dbg_si_single_annual_density_near_met_fire_dropped = dp0_dbg_si_single_annual_density_near_met_fire.drop(columns=columns_to_drop)

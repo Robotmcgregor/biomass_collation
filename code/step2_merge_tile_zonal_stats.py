@@ -1530,6 +1530,8 @@ def main_routine(biomass_csv, tile_dir, output_dir):
     dp1_mask_both_season.to_csv(r"C:\Users\robot\projects\biomass\collated_zonal_stats\sr_fc\dp1_mask_both_season.csv",
                                 index=False)
 
+    #todo there is an issue here WED01 is missing DP1fm annual records
+
     # ================================================= MERGE ==========================================================
 
     # -------------------------------------------- DRY Season ----------------------------------

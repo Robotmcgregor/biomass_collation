@@ -145,7 +145,7 @@ def get_cmd_args_fn():
                    help="Path to the mosaic fire scar zonal stats directory.",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240723_1008",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal\robot_met_ver_zonal_20240801_0927_nafi_only",
-                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_2000_2024",
+                   default=r"C:\Users\robot\projects\biomass\zonal_stats_raw\fire_nafi_2000_2024_new",
                    #default=r"C:\Users\robot\projects\outputs\fire_zonal",
                    )
 
@@ -154,7 +154,7 @@ def get_cmd_args_fn():
                    #default=r"C:\Users\robot\projects\biomass\zonal_stats_raw_biolib\met_clean",
                    #default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024",
                    #default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean",
-                   default = r"F:\silo\outputs")
+                   default = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean_1988_2024")
 
     # p.add_argument('-ms', '--met_si_dir',
     #                help="Path to the meteorological data zonal stats directory.",
@@ -367,29 +367,8 @@ def main_routine():
     print("=" * 100)
     print("=" * 100)
 
-    # #biomass_csv.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\biomass_csv.csv", index=False)
-    # import step5_merge_meteorological_data_agb_zonal_stats
-    # near_met, dp0_dbg_si_single_annual_density_near_met, \
-    #     dp0_dbg_si_mask_single_annual_density_near_met, \
-    #     dp0_dbg_si_single_dry_density_near_met, \
-    #     dp0_dbg_si_mask_single_dry_density_near_met, \
-    #     dp1_dbi_si_annual_density_near_met, \
-    #     dp1_dbi_si_annual_mask_density_near_met, \
-    #     dp1_dbi_si_dry_density_near_met, \
-    #     dp1_dbi_si_dry_mask_density_near_met = step5_merge_meteorological_data_agb_zonal_stats.main_routine(biomass_csv,
-    #                                                                                                         met_dir,
-    #                                                                                                         met_zonal_stats,
-    #                                                                                                         dp0_dbg_si_single_annual_density,
-    #                                                                                                         dp0_dbg_si_mask_single_annual_density,
-    #                                                                                                         dp0_dbg_si_single_dry_density,
-    #                                                                                                         dp0_dbg_si_mask_single_dry_density,
-    #                                                                                                         dp1_dbi_si_annual_density,
-    #                                                                                                         dp1_dbi_si_annual_mask_density,
-    #                                                                                                         dp1_dbi_si_dry_density,
-    #                                                                                                         dp1_dbi_si_dry_mask_density)
-
     #biomass_csv.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\biomass_csv.csv", index=False)
-    import step5_merge_meteorological_data_agb_zonal_stats_orig_data
+    import step5_merge_meteorological_data_agb_zonal_stats
     near_met, dp0_dbg_si_single_annual_density_near_met, \
         dp0_dbg_si_mask_single_annual_density_near_met, \
         dp0_dbg_si_single_dry_density_near_met, \
@@ -397,7 +376,7 @@ def main_routine():
         dp1_dbi_si_annual_density_near_met, \
         dp1_dbi_si_annual_mask_density_near_met, \
         dp1_dbi_si_dry_density_near_met, \
-        dp1_dbi_si_dry_mask_density_near_met = step5_merge_meteorological_data_agb_zonal_stats_orig_data.main_routine(biomass_csv,
+        dp1_dbi_si_dry_mask_density_near_met = step5_merge_meteorological_data_agb_zonal_stats.main_routine(biomass_csv,
                                                                                                             met_dir,
                                                                                                             met_zonal_stats,
                                                                                                             dp0_dbg_si_single_annual_density,
@@ -408,6 +387,27 @@ def main_routine():
                                                                                                             dp1_dbi_si_annual_mask_density,
                                                                                                             dp1_dbi_si_dry_density,
                                                                                                             dp1_dbi_si_dry_mask_density)
+
+    # #biomass_csv.to_csv(r"C:\Users\robot\projects\biomass\scratch_outputs\biomass_csv.csv", index=False)
+    # import step5_merge_meteorological_data_agb_zonal_stats_orig_data
+    # near_met, dp0_dbg_si_single_annual_density_near_met, \
+    #     dp0_dbg_si_mask_single_annual_density_near_met, \
+    #     dp0_dbg_si_single_dry_density_near_met, \
+    #     dp0_dbg_si_mask_single_dry_density_near_met, \
+    #     dp1_dbi_si_annual_density_near_met, \
+    #     dp1_dbi_si_annual_mask_density_near_met, \
+    #     dp1_dbi_si_dry_density_near_met, \
+    #     dp1_dbi_si_dry_mask_density_near_met = step5_merge_meteorological_data_agb_zonal_stats_orig_data.main_routine(biomass_csv,
+    #                                                                                                         met_dir,
+    #                                                                                                         met_zonal_stats,
+    #                                                                                                         dp0_dbg_si_single_annual_density,
+    #                                                                                                         dp0_dbg_si_mask_single_annual_density,
+    #                                                                                                         dp0_dbg_si_single_dry_density,
+    #                                                                                                         dp0_dbg_si_mask_single_dry_density,
+    #                                                                                                         dp1_dbi_si_annual_density,
+    #                                                                                                         dp1_dbi_si_annual_mask_density,
+    #                                                                                                         dp1_dbi_si_dry_density,
+    #                                                                                                         dp1_dbi_si_dry_mask_density)
 
     # print("Finish 1 - line 332 - sr and density met only")
     # import sys

@@ -315,16 +315,17 @@ def drop_cols_fn(df):
     return df_out
 
 
-def main_routine(biomass_csv, dir_,
-                 output_dir,
-                 dp0_dbg_si_single_annual_density,
-                 dp0_dbg_si_mask_single_annual_density,
-                 dp0_dbg_si_single_dry_density,
-                 dp0_dbg_si_mask_single_dry_density,
-                 dp1_dbi_si_annual_density,
-                 dp1_dbi_si_annual_mask_density,
-                 dp1_dbi_si_dry_density,
-                 dp1_dbi_si_dry_mask_density):
+def main_routine():
+    # biomass_csv, dir_,
+    #              output_dir,
+    #              dp0_dbg_si_single_annual_density,
+    #              dp0_dbg_si_mask_single_annual_density,
+    #              dp0_dbg_si_single_dry_density,
+    #              dp0_dbg_si_mask_single_dry_density,
+    #              dp1_dbi_si_annual_density,
+    #              dp1_dbi_si_annual_mask_density,
+    #              dp1_dbi_si_dry_density,
+    #              dp1_dbi_si_dry_mask_density):
 
 
     
@@ -340,9 +341,9 @@ def main_routine(biomass_csv, dir_,
                  dp1_dbi_si_dry_mask_density"""
     # biomass_csv = r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv"
     # # #
-    # dir_ = r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean"
+    # dir_ = r"F:\silo\outputs\met_clean"
     # output_dir = r"C:\Users\robot\projects\biomass\scratch_outputs\met_zonal"
-    # 
+    #
     # print("manual biomass: ", r"C:\Users\robot\projects\biomass\collated_agb\20240707\slats_tern_biomass.csv")
     # 
     # print("manual dir_: ", r"C:\Users\robot\projects\biomass\zonal_stats_raw\met_clean")
